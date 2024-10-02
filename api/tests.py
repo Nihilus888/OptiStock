@@ -1,8 +1,8 @@
-from django.test import TestCase
+from django.test import SimpleTestCase
 from unittest.mock import patch
 from api.client import Client  # Adjust this based on where your Client class is located
 
-class ClientTestCase(TestCase):
+class ClientTestCase(SimpleTestCase):
 
     @patch('api.client.Client.post_request') 
     def test_analyze_absorption_ratio_success(self, mock_post_request):
@@ -45,32 +45,32 @@ class ClientTestCase(TestCase):
     def test_drawdown_ratio(self, mock_post_request):
         mock_post_request.return_value = {
             "portfolios": [
-                    {
-                        "portfolioDrawdowns": [
-                            0,
-                            0.05,
-                            0,
-                            0.1,
-                            0.15,
-                            0.3
-                        ],
-                        "portfolioWorstDrawdowns": [
-                            {
-                                "drawdownDepth": 0.3,
-                                "drawdownStart": 3,
-                                "drawdownBottom": 6,
-                                "drawdownEnd": 0
-                            },
-                            {
-                                "drawdownDepth": 0.05,
-                                "drawdownStart": 1,
-                                "drawdownBottom": 2,
-                                "drawdownEnd": 3
-                            }
-                        ]
-                    }
-                ]
-            }
+                {
+                    "portfolioDrawdowns": [
+                        0,
+                        0.05,
+                        0,
+                        0.1,
+                        0.15,
+                        0.3
+                    ],
+                    "portfolioWorstDrawdowns": [
+                        {
+                            "drawdownDepth": 0.3,
+                            "drawdownStart": 3,
+                            "drawdownBottom": 6,
+                            "drawdownEnd": 0
+                        },
+                        {
+                            "drawdownDepth": 0.05,
+                            "drawdownStart": 1,
+                            "drawdownBottom": 2,
+                            "drawdownEnd": 3
+                        }
+                    ]
+                }
+            ]
+        }
 
         portfolios = [
             {
@@ -80,30 +80,30 @@ class ClientTestCase(TestCase):
             }
         ]
 
-        result = Client.drawdown_ratio(portfolios)  
+        result = Client.drawdown_ratio(portfolios)
 
         # The result is expected to be in a dictionary format with a "portfolios" key.
         expected_result = {
-                "portfolios": [
-                    {
-                        "portfolioDrawdowns": [0, 0.05, 0, 0.1, 0.15, 0.3],
-                        "portfolioWorstDrawdowns": [
-                            {
-                                "drawdownDepth": 0.3,
-                                "drawdownStart": 3,
-                                "drawdownBottom": 6,
-                                "drawdownEnd": 0
-                            },
-                            {
-                                "drawdownDepth": 0.05,
-                                "drawdownStart": 1,
-                                "drawdownBottom": 2,
-                                "drawdownEnd": 3
-                            }
-                        ]
-                    }
-                ]
-            }
+            "portfolios": [
+                {
+                    "portfolioDrawdowns": [0, 0.05, 0, 0.1, 0.15, 0.3],
+                    "portfolioWorstDrawdowns": [
+                        {
+                            "drawdownDepth": 0.3,
+                            "drawdownStart": 3,
+                            "drawdownBottom": 6,
+                            "drawdownEnd": 0
+                        },
+                        {
+                            "drawdownDepth": 0.05,
+                            "drawdownStart": 1,
+                            "drawdownBottom": 2,
+                            "drawdownEnd": 3
+                        }
+                    ]
+                }
+            ]
+        }
 
         self.assertEqual(result, expected_result)
 
@@ -139,11 +139,11 @@ class ClientTestCase(TestCase):
     @patch('api.client.Client.post_request')    
     def test_optimize_portfolio(self, mock_post_request):   
         mock_post_request.return_value = {
-                "assetsWeights": [
-                    0.3999999780097259,
-                    0.6000000219902976
-                ]
-            }
+            "assetsWeights": [
+                0.3999999780097259,
+                0.6000000219902976
+            ]
+        }
 
         assets = 2 
         asset_returns = [0.02, 0.01]
