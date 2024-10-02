@@ -1,0 +1,37 @@
+version: 2.1
+
+jobs:
+  test:
+    docker:
+      # Use an official Python Docker image
+      - image: circleci/python:3.12
+    steps:
+      - checkout
+
+      # Set up Python environment
+      - run:
+          name: Install dependencies
+          command: |
+            python -m venv venv
+            . venv/bin/activate
+            pip install -r requirements.txt
+
+      # Set up the database (SQLite or a simple local DB for testing)
+      - run:
+          name: Migrate the database
+          command: |
+            . venv/bin/activate
+            python manage.py migrate
+
+      # Run tests
+      - run:
+          name: Run Django tests
+          command: |
+            . venv/bin/activate
+            python manage.py test
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - test
