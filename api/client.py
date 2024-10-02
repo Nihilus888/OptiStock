@@ -63,7 +63,7 @@ class Client:
         return ratios
 
     @classmethod
-    def drawdown_ratio(cls, portfolios: list[Dict[str, List[float]]]) -> Optional[List[float]]:
+    def drawdown_ratio(cls, portfolios: list[Dict[str, List[float]]]) -> Optional[Dict]:
         """
         Analyzes the drawdown ratios of the given portfolios.
         
@@ -72,7 +72,7 @@ class Client:
             which is a list of float values representing the portfolio's values over time.
         
         Returns:
-            list[float] or None: A list of drawdown ratios for each portfolio, or None if an error occurred.
+            dict or None: A dictionary containing drawdown information for each portfolio, or None if an error occurred.
         """
         endpoint = "/portfolio/analysis/drawdowns"
         url = f"{cls.BASE_URL}{endpoint}"
@@ -82,7 +82,9 @@ class Client:
         }
 
         json_response = cls.post_request(url, payload) 
-        return json_response.get("drawdownRatios") if json_response else None  
+
+        # Return the full response including both drawdowns and worst drawdowns
+        return json_response if json_response else None
 
 
     @classmethod
@@ -183,7 +185,7 @@ class Client:
 
         json_response = cls.post_request(url, payload)
 
-        return json_response if json_response else None
+        return json_response.get("assetsWeights") if json_response else None
 
     @classmethod
     def post_request(cls, url: str, payload: dict) -> Optional[dict]:
