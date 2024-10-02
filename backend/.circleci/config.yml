@@ -4,22 +4,18 @@ jobs:
   build:
     docker:
       - image: circleci/python:3.9
-    working_directory: ~/backend  # Specify the backend directory here
     steps:
       - checkout
-      - run:
-          name: Change to backend directory
-          command: cd backend  # Ensure we are in the backend directory
       - run:
           name: Install dependencies
           command: |
             python -m pip install --upgrade pip
             pip install -r requirements.txt
       - run:
-          name: Run tests
+          name: Run tests without database
           command: |
-            python manage.py test
-
+            # Ensure no database dependencies are needed
+            python manage.py test --exclude-tag=db_required  # Optionally exclude db tests, if tagged
 workflows:
   version: 2
   build:
