@@ -4,8 +4,12 @@ jobs:
   build:
     docker:
       - image: circleci/python:3.9
+    working_directory: ~/backend  # Specify the backend directory here
     steps:
       - checkout
+      - run:
+          name: Change to backend directory
+          command: cd backend  # Ensure we are in the backend directory
       - run:
           name: Install dependencies
           command: |
@@ -21,4 +25,3 @@ workflows:
   build:
     jobs:
       - build
-Key Changes:
