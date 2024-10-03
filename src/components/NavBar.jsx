@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaBars, FaSearch } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 
 export default function NavBar() {
   return (
@@ -9,7 +10,7 @@ export default function NavBar() {
           <button className="text-white text-xl">
             <FaBars />
           </button>
-          <span className="text-white font-bold text-2xl ml-2">Stock Portfolio</span>
+          <Link to="/" className="text-white font-bold text-2xl ml-2">OptiStock</Link>
         </div>
         
         <div className="relative">
@@ -24,13 +25,13 @@ export default function NavBar() {
         </div>
         
         <div className="flex space-x-4">
-          <button className="text-white">Home</button>
-          <button className="text-white">About</button>
-          <button className="text-white">Services</button>
-          <button className="text-white">Contact</button>
-          <button className="border border-white text-white py-2 px-4 rounded hover:bg-white hover:text-purple-600 transition">
+          <Link to="/" className="text-white mt-2">Home</Link>
+          <Link to="/about" className="text-white mt-2">About</Link>
+          <Link className="text-white mt-2">Services</Link>
+          <Link className="text-white mt-2">Contact</Link>
+          <Link className="border border-white text-white py-2 px-4 rounded hover:bg-white hover:text-purple-600 transition">
             Login
-          </button>
+          </Link>
         </div>
       </div>
     </nav>
