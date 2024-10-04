@@ -10,7 +10,7 @@ export default function NavBar() {
           <button className="text-white text-xl">
             <FaBars />
           </button>
-          <Link to="/" className="text-white font-bold text-2xl ml-2">OptiStock</Link>
+          <Link to="/" className="text-white font-bold text-2xl ml-2">Stock Portfolio</Link>
         </div>
         
         <div className="relative">
@@ -25,11 +25,11 @@ export default function NavBar() {
         </div>
         
         <div className="flex space-x-4">
-          <Link to="/" className="text-white mt-2">Home</Link>
-          <Link to="/about" className="text-white mt-2">About</Link>
-          <Link className="text-white mt-2">Services</Link>
-          <Link className="text-white mt-2">Contact</Link>
-          <Link className="border border-white text-white py-2 px-4 rounded hover:bg-white hover:text-purple-600 transition">
+        <Link to="/" className="text-white mt-2 hover:text-blue-400 hover:underline">Home</Link>
+        <Link to="/about" className="text-white mt-2 hover:text-blue-400 hover:underline">About</Link>
+        <Link to="/create-account" className="text-white mt-2 hover:text-blue-400 hover:underline">Account</Link>
+        <Link to="/contact" className="text-white mt-2 hover:text-blue-400 hover:underline">Contact</Link>
+        <Link to="/login"className="border border-white text-white py-2 px-4 rounded hover:bg-white hover:text-purple-600 transition">
             Login
           </Link>
         </div>
