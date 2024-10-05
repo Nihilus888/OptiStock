@@ -32,13 +32,16 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'accountsUser',
+    'api',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'api',
+    'rest_framework',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -135,3 +138,7 @@ DATABASES = {
         'PORT': config('DATABASE_PORT', default='5432'),
     }
 }
+
+AUTH_USER_MODEL = 'accountsUser.CustomUser'
+
+CORS_ORIGIN_ALLOW_ALL = True 
