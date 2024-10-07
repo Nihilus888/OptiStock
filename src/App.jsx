@@ -1,26 +1,39 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavBar from './components/NavBar';
-import Home from './components/Home';
+import Home from './components/Home'; // If you want to keep this for unauthenticated users
+import HomeAuth from './components/HomeAuth'; // Import the HomeAuth component
 import CreateAccountForm from './components/CreateAccountForm';
-import About from './components/About'
-import Footer from './components/Footer'
-import Login from './components/Login'
-import Contact from './components/Contact'
+import About from './components/About';
+import Footer from './components/Footer';
+import Login from './components/Login';
+import Contact from './components/Contact';
+import { AuthProvider, useAuth } from './components/AuthContext'; // Import AuthProvider
+
+// Create a PrivateRoute component to protect the authenticated route
+const PrivateRoute = ({ element }) => {
+  const { user } = useAuth(); // Use the AuthContext to check if the user is authenticated
+  return user ? element : <Login />; // Redirect to Login if not authenticated
+};
 
 function App() {
   return (
-    <Router>
-      <NavBar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/create-account" element={<CreateAccountForm />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/login" element={<Login />} />
-      </Routes>
-      <Footer />
-    </Router>
+    <AuthProvider> {/* Wrap the entire app with AuthProvider */}
+      <Router>
+        <NavBar />
+        <Routes>
+          <Route path="/" element={<HomeAuth />} /> {/* Home page for authenticated users */}
+          <Route path="/home" element={<Home />} /> {/* Optionally keep Home for unauthenticated users */}
+          <Route path="/create-account" element={<CreateAccountForm />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/login" element={<Login />} />
+          {/* Protected route for authenticated users */}
+          <Route path="/dashboard" element={<PrivateRoute element={<HomeAuth />} />} />
+        </Routes>
+        <Footer />
+      </Router>
+    </AuthProvider>
   );
 }
 

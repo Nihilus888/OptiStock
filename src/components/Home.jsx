@@ -1,6 +1,11 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { ReactTyped as Typed } from 'react-typed';
+
+const handleGetStarted = () => {
+  setTimeout(() => {
+    window.location.href = '/create-account'; // Replace with your actual route
+  }, 1000);
+}
 
 export default function HomePage() {
   return (
@@ -31,12 +36,12 @@ export default function HomePage() {
               showCursor={false}
             />
           </h2>
-          <Link
-            to="/create-account"
+          <button
+            onClick={handleGetStarted}
             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-full transition-colors duration-300"
           >
             Get Started
-          </Link>
+          </button>
         </div>
       </div>
 

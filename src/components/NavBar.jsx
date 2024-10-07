@@ -1,39 +1,52 @@
-import React from 'react';
-import { FaBars, FaSearch } from 'react-icons/fa';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from './AuthContext'; // Import the useAuth hook
+import { toast } from 'react-toastify'; // Import toast for notifications
 
-export default function NavBar() {
+const NavBar = () => {
+  const { user, logout } = useAuth(); // Get user and logout function from context
+  const [logoutTimeout, setLogoutTimeout] = useState(null); // State to manage logout timeout
+
+  const handleLogout = () => {
+    // Show a toast notification before logging out
+    toast.success('Login successful! Redirecting...', {
+      autoClose: 2000,
+    });
+
+    // Clear any existing timeout
+    if (logoutTimeout) {
+      clearTimeout(logoutTimeout);
+    }
+
+    // Set a timeout to log out the user
+    const timeout = setTimeout(() => {
+      localStorage.removeItem('token'); // Remove the token from local storage
+      logout(); // Call the logout function to update context state
+    }, 2000); // Set the delay to 3 seconds
+
+    setLogoutTimeout(timeout); // Store the timeout ID in state
+  };
+
   return (
-    <nav className="bg-gradient-to-r from-purple-600 to-pink-500 shadow-lg">
-      <div className="container mx-auto flex justify-between items-center p-4">
-        <div className="flex items-center">
-          <button className="text-white text-xl">
-            <FaBars />
-          </button>
-          <Link to="/" className="text-white font-bold text-2xl ml-2">Stock Portfolio</Link>
-        </div>
-        
-        <div className="relative">
-          <input 
-            type="text" 
-            placeholder="Search…" 
-            className="bg-white rounded-full py-2 pl-10 pr-4 text-gray-700 focus:outline-none focus:ring-2 focus:ring-purple-400"
-          />
-          <div className="absolute inset-y-0 left-0 flex items-center pl-3">
-            <FaSearch className="text-gray-400" />
-          </div>
-        </div>
-        
-        <div className="flex space-x-4">
-        <Link to="/" className="text-white mt-2 hover:text-blue-400 hover:underline">Home</Link>
-        <Link to="/about" className="text-white mt-2 hover:text-blue-400 hover:underline">About</Link>
-        <Link to="/create-account" className="text-white mt-2 hover:text-blue-400 hover:underline">Account</Link>
-        <Link to="/contact" className="text-white mt-2 hover:text-blue-400 hover:underline">Contact</Link>
-        <Link to="/login"className="border border-white text-white py-2 px-4 rounded hover:bg-white hover:text-purple-600 transition">
-            Login
-          </Link>
+    <nav className="bg-black p-4">
+      <div className="container mx-auto flex justify-between items-center">
+        <Link to="/" className="text-white text-2xl">OptiStock</Link>
+        <div>
+          <Link to="/" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">Home</Link>
+          <Link to="/about" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">About</Link>
+          <Link to="/contact" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">Contact</Link>
+          {user ? ( // Check if the user is authenticated
+            <>
+              <Link to="/dashboard" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">Dashboard</Link>
+              <button onClick={handleLogout} className="text-white px-4 hover:text-blue-400 transition-colors duration-300">Logout</button>
+            </>
+          ) : (
+            <Link to="/login" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">Login</Link>
+          )}
         </div>
       </div>
     </nav>
   );
-}
+};
+
+export default NavBar;
