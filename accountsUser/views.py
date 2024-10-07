@@ -1,12 +1,30 @@
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
-from .serializers import UserSerializer
+from django.contrib.auth import get_user_model
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 
-@api_view(['POST'])
+User = get_user_model()
+
+@csrf_exempt  # Use this for testing only; implement CSRF protection in production
 def register(request):
-    serializer = UserSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        name = data.get('name')  # Using 'name' instead of 'username'
+        password = data.get('password')
+        email = data.get('email')
+        experience = data.get('experience', 0)  # Default to 0 if not provided
+        age = data.get('age')  # Add age if needed
+
+        if not name or not password or not email:
+            return JsonResponse({'message': 'Missing required fields.'}, status=400)
+
+        # Create and save the user
+        user = User(username=name, email=email, experience=experience)
+        user.set_password(password)  # Hash the password
+        if age:  # If you want to store age
+            user.age = age  # Assuming your CustomUser model has an 'age' field
+        user.save()
+
+        return JsonResponse({'message': 'User registered successfully.'}, status=201)
+
+    return JsonResponse({'message': 'Invalid method.'}, status=405)

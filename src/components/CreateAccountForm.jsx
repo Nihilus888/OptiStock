@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { toast, ToastContainer } from 'react-toastify'; // Import toast functions
+import 'react-toastify/dist/ReactToastify.css'; // Import the CSS
 
 export default function CreateAccountForm() {
   const [formData, setFormData] = useState({
@@ -17,10 +19,19 @@ export default function CreateAccountForm() {
     });
   };
 
+  const handleExperienceChange = (e) => {
+    // Update the experience value when the slider changes
+    const experienceValue = parseInt(e.target.value, 10); // Convert string to number
+    setFormData({
+      ...formData,
+      experience: experienceValue,
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:8000/api/register/', {
+      const response = await fetch('http://127.0.0.1:8000/accountsUser/register/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -29,19 +40,22 @@ export default function CreateAccountForm() {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        console.log('User created:', data);
-        // Optionally redirect the user or show a success message
+        await response.json();
+        toast.success('User registered successfully!'); // Show success toast
+        setTimeout(() => {
+          window.location.href = '/login'; // Redirect to login page
+        }, 2000); // Redirect after 2 seconds
       } else {
-        console.error('Registration failed');
+        toast.error('Registration failed. Please try again.'); // Show error toast
       }
     } catch (error) {
-      console.error('Error:', error);
+      toast.error('An error occurred. Please try again.'); // Show error toast
     }
   };
 
   return (
     <div className="flex justify-center items-center h-screen bg-black">
+      <ToastContainer /> {/* Add ToastContainer here */}
       <div className="bg-gray-800 shadow-md rounded-lg p-8 w-96 animate-slide-up">
         <h2 className="text-2xl font-bold mb-6 text-center text-white animate-slide-up-delay-1">
           Create Account
@@ -73,10 +87,10 @@ export default function CreateAccountForm() {
 
           <div className="mb-6 animate-slide-up-delay-7">
             <label htmlFor="experience" className="block text-sm font-medium text-gray-300">Experience</label>
-            <input type="range" id="experience" name="experience" min="0" max="10" value={formData.experience} onChange={handleChange}
+            <input type="range" id="experience" name="experience" min="0" max="10" value={formData.experience} onChange={handleExperienceChange}
               className="mt-2 w-full h-2 bg-gray-600 rounded-lg appearance-none cursor-pointer" />
             <div className="flex justify-between text-sm text-gray-400">
-              <span>0 years</span>
+              <span>{formData.experience} years</span> {/* Display the experience value */}
               <span>10 years</span>
             </div>
           </div>
