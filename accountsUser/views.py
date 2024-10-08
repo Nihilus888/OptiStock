@@ -1,8 +1,9 @@
-from django.contrib.auth import get_user_model, authenticate, login as auth_login  # Import authenticate
+from django.contrib.auth import get_user_model, authenticate
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from rest_framework.decorators import api_view
-from rest_framework_simplejwt.tokens import AccessToken, RefreshToken
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
 import json
 
 User = get_user_model()
@@ -53,5 +54,6 @@ def login(request):
     return JsonResponse({'message': 'Invalid method.'}, status=405)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])  # Require authentication
 def protected_view(request):
     return JsonResponse({'message': 'This is a protected view.'}, status=200)

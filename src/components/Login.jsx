@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { useAuth } from './AuthContext'; 
-import { useNavigate } from 'react-router-dom'; 
-import { ToastContainer, toast } from 'react-toastify'; // Correctly import toast and ToastContainer
-import 'react-toastify/dist/ReactToastify.css'; // Import styles
+import { useAuth } from './AuthContext'; // Import the useAuth hook
+import { useNavigate } from 'react-router-dom'; // Import useNavigate for redirection
+import { toast, ToastContainer } from 'react-toastify'
 
 export default function LoginForm() {
   const [formData, setFormData] = useState({
@@ -10,8 +9,8 @@ export default function LoginForm() {
     password: '',
   });
 
-  const { login } = useAuth(); 
-  const navigate = useNavigate(); 
+  const { login } = useAuth(); // Get the login function from the context
+  const navigate = useNavigate(); // Initialize useNavigate for redirection
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,22 +34,23 @@ export default function LoginForm() {
       if (response.ok) {
         const data = await response.json();
         console.log('User logged in:', data);
-        localStorage.setItem('token', data.access); 
-        login(data); 
+        // Save the JWT token in local storage or context
+        localStorage.setItem('token', data.access); // Save access token
+        login(data); // Use the login function to set the user state in the context
         
         // Show a success notification
         toast.success('Login successful! Redirecting...', {
-          autoClose: 2000,
+          autoClose: 2000, // Close after 2 seconds
         });
 
+        // Redirect after a timeout
         setTimeout(() => {
-          navigate('/dashboard'); 
+          navigate('/dashboard'); // Redirect to the dashboard after successful login
         }, 2000);
       } else {
         const errorData = await response.json();
         console.error('Login failed:', errorData);
         toast.error(`Login failed: ${errorData.message || 'Please try again.'}`, {
-          position: toast.POSITION.TOP_CENTER,
           autoClose: 3000,
         });
       }
@@ -65,7 +65,7 @@ export default function LoginForm() {
 
   return (
     <div className="flex justify-center items-center h-screen bg-black">
-      <ToastContainer />
+      <ToastContainer /> {/* Add ToastContainer for notifications */}
       <div className="bg-gray-800 shadow-xl rounded-lg p-10 w-96 animate-slide-up">
         <h2 className="text-3xl font-bold mb-6 text-center text-white">Login</h2>
         <p className="text-gray-400 text-center mb-6">Welcome back! Please enter your credentials.</p>

@@ -9,6 +9,7 @@ import Footer from './components/Footer';
 import Login from './components/Login';
 import Contact from './components/Contact';
 import { AuthProvider, useAuth } from './components/AuthContext'; // Import AuthProvider
+import PortfolioAnalysis from './components/PortfolioAnalysis';
 
 // Create a PrivateRoute component to protect the authenticated route
 const PrivateRoute = ({ element }) => {
@@ -22,12 +23,13 @@ function App() {
       <Router>
         <NavBar />
         <Routes>
-          <Route path="/" element={<HomeAuth />} /> {/* Home page for authenticated users */}
-          <Route path="/home" element={<Home />} /> {/* Optionally keep Home for unauthenticated users */}
+          <Route path="/home" element={<HomeAuth />} /> {/* Home page for authenticated users */}
+          <Route path="/" element={<Home />} /> {/* Optionally keep Home for unauthenticated users */}
           <Route path="/create-account" element={<CreateAccountForm />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/portfolio-analysis" element={<PortfolioAnalysis />} />
           {/* Protected route for authenticated users */}
           <Route path="/dashboard" element={<PrivateRoute element={<HomeAuth />} />} />
         </Routes>

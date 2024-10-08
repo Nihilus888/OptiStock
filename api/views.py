@@ -8,6 +8,7 @@ def analyze_absorption_ratio_view(request):
     data = request.data
     assets = data.get('assets')
     covariance_matrix = data.get('assetsCovarianceMatrix')
+    print(covariance_matrix)
 
     if assets is None or covariance_matrix is None:
         return JsonResponse({'error': 'Missing required fields'}, status=400)
