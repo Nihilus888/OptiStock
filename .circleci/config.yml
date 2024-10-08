@@ -3,12 +3,12 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/python:3.9
-      - image: circleci/postgres:latest
+      - image: circleci/python:3.9  # Primary image for running your Django app
+      - image: circleci/postgres:latest  # PostgreSQL service image
         environment:
-          POSTGRES_DB: portfolio
-          POSTGRES_USER: elliotttay
-          POSTGRES_HOST_AUTH_METHOD: trust  
+          POSTGRES_DB: portfolio  # Database name
+          POSTGRES_USER: elliotttay  # Database user
+          POSTGRES_HOST_AUTH_METHOD: trust # Set a strong password here
     steps:
       - checkout  # Check out your code
       - run:
@@ -16,9 +16,17 @@ jobs:
           command: |
             pip install -r requirements.txt  # Install dependencies
       - run:
-          name: Start PostgreSQL
+          name: Wait for PostgreSQL
           command: |
-            sudo service postgresql start
+            echo "Waiting for PostgreSQL to start..."
+            for i in {30..0}; do
+              if pg_isready -h localhost -p 5432; then
+                echo "PostgreSQL is up!"
+                break
+              fi
+              echo "PostgreSQL is unavailable - waiting..."
+              sleep 1
+            done
       - run:
           name: Migrate Database
           command: python manage.py migrate
