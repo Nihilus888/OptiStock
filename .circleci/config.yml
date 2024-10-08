@@ -8,9 +8,17 @@ jobs:
         environment:
           POSTGRES_DB: portfolio
           POSTGRES_USER: elliotttay
-          POSTGRES_HOST_AUTH_METHOD: trust  # Allows all connections without a password
+          POSTGRES_PASSWORD: your_password_here  # Set a strong password here
     steps:
-      - checkout
+      - checkout  # Check out your code
+      - run:
+          name: Install Dependencies
+          command: |
+            pip install -r requirements.txt  # Install dependencies
+      - run:
+          name: Start PostgreSQL
+          command: |
+            sudo service postgresql start
       - run:
           name: Migrate Database
           command: python manage.py migrate
@@ -23,3 +31,4 @@ workflows:
   build_and_test:
     jobs:
       - build
+
