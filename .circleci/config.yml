@@ -5,6 +5,10 @@ jobs:
     docker:
       - image: circleci/python:3.9
       - image: circleci/postgres:latest
+        environment:
+          POSTGRES_DB: portfolio
+          POSTGRES_USER: elliotttay
+          POSTGRES_HOST_AUTH_METHOD: trust  # Allows all connections without a password
     steps:
       - checkout
       - run:
