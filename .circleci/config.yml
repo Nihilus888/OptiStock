@@ -8,7 +8,7 @@ jobs:
         environment:
           POSTGRES_DB: portfolio
           POSTGRES_USER: elliotttay
-          POSTGRES_PASSWORD: your_password_here  # Set a strong password here
+          POSTGRES_HOST_AUTH_METHOD: trust  
     steps:
       - checkout  # Check out your code
       - run:
@@ -31,4 +31,3 @@ workflows:
   build_and_test:
     jobs:
       - build
-
