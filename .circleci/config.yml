@@ -4,20 +4,18 @@ jobs:
   build:
     docker:
       - image: circleci/python:3.9
+      - image: circleci/postgres:latest
     steps:
       - checkout
       - run:
-          name: Install dependencies
-          command: |
-            python -m pip install --upgrade pip
-            pip install -r requirements.txt
+          name: Migrate Database
+          command: python manage.py migrate
       - run:
-          name: Run tests without database
-          command: |
-            # Ensure no database dependencies are needed
-            python manage.py test --exclude-tag=db_required  # Optionally exclude db tests, if tagged
+          name: Run Tests
+          command: python manage.py test
+
 workflows:
   version: 2
-  build:
+  build_and_test:
     jobs:
       - build
