@@ -9,7 +9,7 @@ jobs:
           POSTGRES_DB: portfolio  # Database name
           POSTGRES_USER: elliotttay  # Database user
           POSTGRES_HOST_AUTH_METHOD: trust  # Set a strong password here
-      - image: circleci/node:20  # Use Node.js version 20
+      - image: node:20  # Use the official Node.js version 20 image
     steps:
       - checkout  # Check out your code
       - run:
