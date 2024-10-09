@@ -35,6 +35,17 @@ jobs:
           name: Run Django Tests
           command: python manage.py test
       - run:
+          name: Check Current Directory
+          command: pwd  # Print the current working directory
+      - run:
+          name: List Contents of Portfolio Optimizer
+          command: ls -la portfolioOptimizer  # List files in portfolioOptimizer
+      - run:
+          name: Check Node and npm Versions
+          command: |
+            node -v
+            npm -v
+      - run:
           name: Install Node.js Dependencies
           command: |
             cd portfolioOptimizer
