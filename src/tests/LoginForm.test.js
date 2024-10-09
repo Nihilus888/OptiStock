@@ -21,8 +21,11 @@ jest.mock('../components/AuthContext', () => ({
 }));
 
 beforeEach(() => {
-  jest.clearAllMocks(); // Clear any previous mocks
-});
+    jest.clearAllMocks(); // Clear any previous mocks
+    console.log = jest.fn(); // Mock console.log
+    console.error = jest.fn(); // Mock console.error
+  });
+  
 
 test('submits the form and shows success notification', async () => {
   // Mock the implementation of useAuth
