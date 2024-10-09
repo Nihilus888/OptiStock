@@ -20,3 +20,7 @@ OptiStock's API integration connects with stock market data providers and optimi
 
 ## Vision
 The vision for OptiStock is to become a go-to solution for investors looking for automated, reliable, and comprehensive portfolio management. It aims to combine the latest advancements in data science and financial modeling with an intuitive user interface, making high-level financial analysis accessible to both experienced and novice investors alike.
+
+
+## Things that I have picked up
+With the increasing rate of devops being required for full stack software engineers, I've decided to pick up and do more of automated testing via CI/CD pipelines using circle ci and writing out the test cases for both frontend and backend to ensure that my application behaves as it should be without any unforeseen issues arising that might break it. 
