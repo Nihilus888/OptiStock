@@ -3,13 +3,12 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/python:3.9  # Primary image for running your Django app
+      - image: circleci/python:3.9-node  # Use a convenience image that includes both Python and Node.js
       - image: circleci/postgres:latest  # PostgreSQL service image
         environment:
           POSTGRES_DB: portfolio  # Database name
           POSTGRES_USER: elliotttay  # Database user
           POSTGRES_HOST_AUTH_METHOD: trust  # Set a strong password here
-      - image: node:20  # Use the official Node.js version 20 image
     steps:
       - checkout  # Check out your code
       - run:
@@ -35,15 +34,11 @@ jobs:
           name: Run Django Tests
           command: python manage.py test
       - run:
-          name: Check Current Directory
-          command: pwd  # Print the current working directory
-      - run:
-          name: List Contents of Portfolio Optimizer
-          command: ls -la portfolioOptimizer  # List files in portfolioOptimizer
-      - run:
-          name: Check Node and npm Versions
+          name: Check Node.js and npm Versions
           command: |
+            echo "Checking Node.js version..."
             node -v
+            echo "Checking npm version..."
             npm -v
       - run:
           name: Install Node.js Dependencies
