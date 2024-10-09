@@ -8,8 +8,8 @@ jobs:
         environment:
           POSTGRES_DB: portfolio  # Database name
           POSTGRES_USER: elliotttay  # Database user
-          POSTGRES_HOST_AUTH_METHOD: trust # Set a strong password here
-      - image: circleci/node:14  # Add a Node.js image for running frontend tests
+          POSTGRES_HOST_AUTH_METHOD: trust  # Set a strong password here
+      - image: circleci/node:20  # Use Node.js version 20
     steps:
       - checkout  # Check out your code
       - run:
@@ -37,11 +37,13 @@ jobs:
       - run:
           name: Install Node.js Dependencies
           command: |
+            cd portfolioOptimizer
             npm install 
       - run:
           name: Run Frontend Tests
           command: |
-            npm test 
+            cd portfolioOptimizer
+            npm test -- --watchAll=false
 
 workflows:
   version: 2
