@@ -10,6 +10,8 @@ import Login from './components/Login';
 import Contact from './components/Contact';
 import { AuthProvider, useAuth } from './components/AuthContext'; // Import AuthProvider
 import PortfolioAnalysis from './components/PortfolioAnalysis';
+import News from './components/News';
+import Stats from './components/Stats';
 
 // Create a PrivateRoute component to protect the authenticated route
 const PrivateRoute = ({ element }) => {
@@ -29,7 +31,9 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/portfolio-analysis" element={<PortfolioAnalysis />} />
+          <Route path="/stats" element={<PrivateRoute element={<Stats />} />} />
+          <Route path="/news" element={<PrivateRoute element={<News />} />} />
+          <Route path="/portfolio-analysis" element={<PrivateRoute element={<PortfolioAnalysis />} />} />
           {/* Protected route for authenticated users */}
           <Route path="/dashboard" element={<PrivateRoute element={<HomeAuth />} />} />
         </Routes>

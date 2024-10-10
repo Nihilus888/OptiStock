@@ -22,7 +22,7 @@ const NavBar = () => {
     const timeout = setTimeout(() => {
       localStorage.removeItem('token'); // Remove the token from local storage
       logout(); // Call the logout function to update context state
-    }, 2000); // Set the delay to 3 seconds
+    }, 2000); // Set the delay to 2 seconds
 
     setLogoutTimeout(timeout); // Store the timeout ID in state
   };
@@ -32,11 +32,18 @@ const NavBar = () => {
       <div className="container mx-auto flex justify-between items-center">
         <Link to="/" className="text-white text-2xl">OptiStock</Link>
         <div>
-          <Link to="/" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">Home</Link>
-          <Link to="/about" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">About</Link>
-          <Link to="/contact" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">Contact</Link>
+          {!user && ( // Show these links only if the user is not logged in
+            <>
+              <Link to="/" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">Home</Link>
+              <Link to="/about" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">About</Link>
+              <Link to="/contact" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">Contact</Link>
+              <Link to="/create-account" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">Create</Link>
+            </>
+          )}
           {user ? ( // Check if the user is authenticated
             <>
+              <Link to="/stats" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">Stats</Link>
+              <Link to="/news" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">News</Link>
               <Link to="/dashboard" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">Dashboard</Link>
               <Link to="/portfolio-analysis" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">Portfolio Analysis</Link>
               <button onClick={handleLogout} className="text-white px-4 hover:text-blue-400 transition-colors duration-300">Logout</button>

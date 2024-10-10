@@ -1,15 +1,18 @@
 import React from 'react';
 import { ReactTyped as Typed } from 'react-typed';
-import { useAuth } from './AuthContext'; // Import the useAuth hook
-
-const handleGetStarted = () => {
-  setTimeout(() => {
-    window.location.href = '/create-account'; // Replace with your actual route
-  }, 1000);
-};
+import { useAuth } from './AuthContext';
+import { useNavigate } from 'react-router-dom'; 
 
 export default function HomeAuth() {
-  const { user } = useAuth(); // Access the authenticated user from context
+  const { user } = useAuth();
+  const navigate = useNavigate(); 
+
+  // Define the handlePortfolioAnalysis function inside the component
+  const handlePortfolioAnalysis = () => {
+    setTimeout(() => {
+      navigate('/portfolio-analysis'); // Use navigate to route without a full reload
+    }, 1000); // Delay for 1 second
+  };
 
   return (
     <div className="bg-black min-h-screen text-white">
@@ -40,10 +43,10 @@ export default function HomeAuth() {
             />
           </h2>
           <button
-            onClick={handleGetStarted}
+            onClick={handlePortfolioAnalysis}
             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-full transition-colors duration-300"
           >
-            Get Started
+            Portfolio Analysis
           </button>
         </div>
       </div>
