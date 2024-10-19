@@ -2,24 +2,34 @@ const API_BASE_URL = 'http://127.0.0.1:8000/api'; // Adjust the URL based on you
 
 // Function to analyze absorption ratio
 export const analyzeAbsorptionRatio = async (assets, covarianceArray) => {
-  const response = await fetch(`${API_BASE_URL}/analyze/absorption-ratio/`, {
-    method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            assets: assets,
-            assetsCovarianceMatrix: covarianceArray  // Ensure the key matches the backend
-        }),
-    });
-    
-    if (!response.ok) {
-        throw new Error('Failed to fetch');
-    }
+  try {
+      const response = await fetch(`${API_BASE_URL}/analyze/absorption-ratio/`, {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              assets: assets,
+              assetsCovarianceMatrix: covarianceArray  // Ensure the key matches the backend
+          }),
+      });
+      
 
-    return await response.json();
+      if (!response.ok) {
+          // Log the error response for better debugging
+          const errorData = await response.json();
+          console.log('assetsCovarianceMatrix', errorData.assetsCovarianceMatrix)
+          console.error('Error:', errorData);
+          throw new Error('Failed to fetch');
+      }
+
+      console.log('Response:', response);
+      return await response.json();  // Return the JSON result from the server
+  } catch (error) {
+      console.error('Request failed:', error);
+      throw error;
+  }
 };
-
 // Function to analyze diversification ratio
 export const analyzeDiversificationRatio = async (assets, covarianceMatrix, portfolios) => {
   const response = await fetch(`${API_BASE_URL}/analyze/diversification-ratio/`, {

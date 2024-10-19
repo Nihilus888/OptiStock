@@ -98,11 +98,11 @@ const PortfolioAnalysis = () => {
   };
 
   return (
-    <div className="flex justify-center items-center bg-black">
+    <div className="justify-center items-center bg-black">
         <div className="p-4 max-w-lg mx-auto bg-black rounded-lg shadow-md">
         <h2 className="text-2xl font-semibold mb-4 text-white">Portfolio Analysis</h2>
 
-        <div className="flex space-x-4">
+        <div className="flex space-x-">
             <button
             onClick={() => setActiveTab('absorption')}
             className={`px-4 py-2 rounded ${activeTab === 'absorption' ? 'bg-blue-500 text-white' : 'bg-gray-600 text-white'}`}
@@ -132,7 +132,7 @@ const PortfolioAnalysis = () => {
         {/* Forms */}
         {activeTab === 'absorption' && (
             <form onSubmit={handleAbsorptionSubmit} className="space-y-4">
-            <div className="h-30">
+            <div className="h-50">
                 <label className="block text-sm font-medium mb-1 text-white">Number of Assets</label>
                 <input
                 type="number"

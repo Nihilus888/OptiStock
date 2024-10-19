@@ -10,9 +10,9 @@ const TickerNews = () => {
   const fetchGeneralNews = async () => {
     setLoading(true);
     try {
-      const response = await fetch(`https://api.marketaux.com/v1/news/all?filter_entities=true&language=en&api_token=${process.env.REACT_APP_API_TOKEN}`);
+      const response = await fetch(`https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers=AAPL&apikey=8PGDFL6JGOQEL6AI`);
       const result = await response.json();
-      setArticles(result.data); // Update with general news data
+      setArticles(result.feed); // Update with general news data
     } catch (err) {
       setError("Failed to fetch general news. Please try again.");
       console.error("Error fetching the general news:", err);
@@ -25,10 +25,10 @@ const TickerNews = () => {
     setLoading(true);
     setError(null); // Reset errors
     try {
-      const response = await fetch(`https://api.marketaux.com/v1/news/all?symbols=${ticker}&filter_entities=true&language=en&api_token=mZpIPVNKbpGSAkuv1QA4C6QZfOmXZdqOBM5loKGx`);
+      const response = await fetch(`https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers=${ticker}&apikey=8PGDFL6JGOQEL6AI`);
       const result = await response.json();
-      if (result.data && result.data.length > 0) {
-        setArticles(result.data); // Update articles with API response data
+      if (result) {
+        setArticles(result); // Update articles with API response data
       } else {
         fetchGeneralNews(); // Fallback to general news if no articles found for the ticker
       }
@@ -88,16 +88,17 @@ const TickerNews = () => {
       {/* Display the articles */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {articles.length > 0 ? (
-          articles.map(article => (
+          articles.map((article, index) => (
             <div
-              key={article.uuid}
+              key={index}
               className="bg-gray-800 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow"
             >
               <h2 className="text-xl font-bold mb-2">{article.title}</h2>
-              <p className="text-gray-400 mb-4">{article.snippet}</p>
-              {article.image_url && (
-                <img src={article.image_url} alt={article.title} className="mb-4 rounded-lg" />
+              <p className="text-gray-400 mb-4">{article.summary}</p>
+              {article.banner_image && (
+                <img src={article.banner_image} alt={article.title} className="mb-4 rounded-lg" />
               )}
+              <p className="mb-4">By: {article.authors.join(", ")}</p>
               <a
                 href={article.url}
                 target="_blank"

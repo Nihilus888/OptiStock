@@ -1,22 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 const Stats = () => {
-  const [ticker, setTicker] = useState('TSLA,AMZN,MSFT'); // Default tickers
-  const [stockData, setStockData] = useState([]);
+  const [ticker, setTicker] = useState(''); // Ticker input state
+  const [stockData, setStockData] = useState(null); // Stock data state
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   // Function to fetch stock intraday stats based on the ticker symbols
   const fetchStockStats = async () => {
+    if (!ticker) return; // Prevent API call if no ticker is set
+
     setLoading(true);
     setError(null); // Reset errors
+    setStockData(null); // Reset stock data before new fetch
     try {
-      const response = await fetch(`https://api.marketaux.com/v1/entity/stats/intraday?symbols=${ticker}&interval=day&published_after=2024-10-09T09:43&language=en&api_token=${process.env.API_TOKEN}`);
+      const response = await fetch(
+        `https://www.alphavantage.co/query?function=OVERVIEW&symbol=${ticker}&apikey=8PGDFL6JGOQEL6AI`
+      );
       const result = await response.json();
-      if (result.data && result.data.length > 0) {
-        setStockData(result.data); // Set the stock data entries
+
+      if (result.Information) {
+        setError("API call limit reached. Please try again later.");
+      } else if (result.Symbol) {
+        setStockData(result); // Update stock data if the response is valid
       } else {
-        setError("No data found for the provided ticker symbols.");
+        setError("No data found for the provided ticker symbol.");
       }
     } catch (err) {
       setError("Failed to fetch stock data. Please try again.");
@@ -25,15 +33,10 @@ const Stats = () => {
     setLoading(false);
   };
 
-  // Fetch stock stats when the component mounts or when the ticker changes
-  useEffect(() => {
-    fetchStockStats();
-  }, [ticker]);
-
   // Function to handle the form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetchStockStats(); // Fetch stock data based on current ticker state
+    fetchStockStats(); // Fetch stock data based on the current ticker
   };
 
   return (
@@ -46,7 +49,7 @@ const Stats = () => {
           type="text"
           value={ticker}
           onChange={(e) => setTicker(e.target.value.toUpperCase())} // Ensure the ticker is uppercase
-          placeholder="Enter ticker symbols (e.g. TSLA, AMZN, MSFT)"
+          placeholder="Enter ticker symbol (e.g. TSLA, AMZN, MSFT)"
           className="w-full md:w-2/3 lg:w-1/2 p-3 rounded-l-md border border-gray-600 text-black"
         />
         <button
@@ -68,21 +71,24 @@ const Stats = () => {
       {error && <p className="text-red-500 text-center">{error}</p>}
 
       {/* Display the stock stats */}
-      {stockData.length > 0 && (
-        <div className="bg-gray-800 p-6 rounded-lg shadow-md">
-          {stockData.map(dateEntry => (
-            <div key={dateEntry.date} className="mb-4">
-              <h3 className="text-lg font-semibold">{new Date(dateEntry.date).toLocaleDateString()}</h3>
-              {dateEntry.data.map(stock => (
-                <div key={stock.key} className="mb-2">
-                  <h2 className="text-xl font-bold">{stock.key}</h2>
-                  <p><strong>Total Documents:</strong> {stock.total_documents}</p>
-                  <p><strong>Average Sentiment:</strong> {stock.sentiment_avg.toFixed(2)}</p>
-                </div>
-              ))}
-            </div>
-          ))}
+      {stockData && (
+        <div>
+          <div className="text-center text-white text-xl mb-4">Symbol: {stockData.Symbol}</div>
+          <div className="text-center text-white text-xl mb-4">Asset Type: {stockData.AssetType}</div>
+          <div className="text-center text-white text-xl mb-4">Name: {stockData.Name}</div>
+          <div className="text-center text-white text-xl mb-4">EBITDA: {stockData.EBITDA}</div>
+          <div className="text-center text-white text-xl mb-4">PEGRatio: {stockData.PEGRatio}</div>
+          <div className="text-center text-white text-xl mb-4">Book Value: {stockData.BookValue}</div>
+          <div className="text-center text-white text-xl mb-4">Dividend Per Share: {stockData.DividendPerShare}</div>
+          <div className="text-center text-white text-xl mb-4">Return On Asset: {stockData.ReturnOnAssetsTTM}</div>
+          <div className="text-center text-white text-xl mb-4">Return On Equity: {stockData.ReturnOnEquityTTM}</div>
+          <div className="text-center text-white text-xl mb-4">Analyst Target Price: {stockData.AnalystTargetPrice}</div>
         </div>
+      )}
+
+      {/* Show message when no stock data is available */}
+      {!loading && !error && !stockData && (
+        <p className="text-center text-gray-400">Enter a ticker symbol to view stock data.</p>
       )}
     </div>
   );
