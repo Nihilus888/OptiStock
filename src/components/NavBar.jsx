@@ -42,6 +42,7 @@ const NavBar = () => {
           )}
           {user ? ( // Check if the user is authenticated
             <>
+              <Link to="/price" className="text-white px-4 hover:text-blue transition-colors duration-300">Price</Link>
               <Link to="/stats" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">Stats</Link>
               <Link to="/news" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">News</Link>
               <Link to="/dashboard" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">Dashboard</Link>
