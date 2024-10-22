@@ -11,4 +11,4 @@ urllib3==2.2.3
 djangorestframework==3.14.0  
 django-cors-headers==3.13.0  
 djangorestframework-simplejwt
-django-debug-toolbar==3.9.4
+django-debug-toolbar==4.0.0
