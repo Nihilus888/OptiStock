@@ -14,11 +14,11 @@ export const analyzeAbsorptionRatio = async (assets, covarianceArray) => {
           }),
       });
       
+      console.log(response);
 
       if (!response.ok) {
           // Log the error response for better debugging
           const errorData = await response.json();
-          console.log('assetsCovarianceMatrix', errorData.assetsCovarianceMatrix)
           console.error('Error:', errorData);
           throw new Error('Failed to fetch');
       }

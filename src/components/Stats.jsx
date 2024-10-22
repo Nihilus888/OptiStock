@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Bar } from 'react-chartjs-2';
+import { useTable } from 'react-table';
 
 const Stats = () => {
   const [ticker, setTicker] = useState(''); // Ticker input state
@@ -39,6 +41,83 @@ const Stats = () => {
     fetchStockStats(); // Fetch stock data based on the current ticker
   };
 
+  // Prepare data for the charts (excluding EBITDA)
+  const chartData = {
+    labels: [
+      'PEGRatio',
+      'Book Value',
+      'Dividend Per Share',
+      'Return On Assets',
+      'Return On Equity',
+      'Analyst Target Price',
+    ],
+    datasets: [
+      {
+        label: ticker || 'Stock Data', // Use the ticker or a default label
+        data: [
+          parseFloat(stockData?.PEGRatio || 0),
+          parseFloat(stockData?.BookValue || 0),
+          parseFloat(stockData?.DividendPerShare || 0),
+          parseFloat(stockData?.ReturnOnAssetsTTM || 0),
+          parseFloat(stockData?.ReturnOnEquityTTM || 0),
+          parseFloat(stockData?.AnalystTargetPrice || 0),
+        ],
+        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+      },
+    ],
+  };
+
+  // Prepare data for the pivot table (excluding EBITDA)
+  const dataForTable = React.useMemo(
+    () => [
+      {
+        metric: 'PEGRatio',
+        value: parseFloat(stockData?.PEGRatio || 0),
+      },
+      {
+        metric: 'Book Value',
+        value: parseFloat(stockData?.BookValue || 0),
+      },
+      {
+        metric: 'Dividend Per Share',
+        value: parseFloat(stockData?.DividendPerShare || 0),
+      },
+      {
+        metric: 'Return On Assets',
+        value: parseFloat(stockData?.ReturnOnAssetsTTM || 0),
+      },
+      {
+        metric: 'Return On Equity',
+        value: parseFloat(stockData?.ReturnOnEquityTTM || 0),
+      },
+      {
+        metric: 'Analyst Target Price',
+        value: parseFloat(stockData?.AnalystTargetPrice || 0),
+      },
+    ],
+    [stockData]
+  );
+
+  // Columns for the pivot table
+  const columns = React.useMemo(
+    () => [
+      {
+        Header: 'Metric',
+        accessor: 'metric', // accessor is the "key" in the data
+      },
+      {
+        Header: 'Value',
+        accessor: 'value',
+      },
+    ],
+    []
+  );
+
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
+    columns,
+    data: dataForTable,
+  });
+
   return (
     <div className="max-w-10xl mx-auto p-6 bg-gray-900 text-white min-h-screen">
       <h1 className="text-4xl font-extrabold mb-6 text-center">Stock Intraday Statistics</h1>
@@ -76,13 +155,43 @@ const Stats = () => {
           <div className="text-center text-white text-xl mb-4">Symbol: {stockData.Symbol}</div>
           <div className="text-center text-white text-xl mb-4">Asset Type: {stockData.AssetType}</div>
           <div className="text-center text-white text-xl mb-4">Name: {stockData.Name}</div>
-          <div className="text-center text-white text-xl mb-4">EBITDA: {stockData.EBITDA}</div>
-          <div className="text-center text-white text-xl mb-4">PEGRatio: {stockData.PEGRatio}</div>
-          <div className="text-center text-white text-xl mb-4">Book Value: {stockData.BookValue}</div>
-          <div className="text-center text-white text-xl mb-4">Dividend Per Share: {stockData.DividendPerShare}</div>
-          <div className="text-center text-white text-xl mb-4">Return On Asset: {stockData.ReturnOnAssetsTTM}</div>
-          <div className="text-center text-white text-xl mb-4">Return On Equity: {stockData.ReturnOnEquityTTM}</div>
-          <div className="text-center text-white text-xl mb-4">Analyst Target Price: {stockData.AnalystTargetPrice}</div>
+
+          {/* Chart for stock data */}
+          <div className="mt-8">
+            <Bar data={chartData} options={{ responsive: true }} />
+          </div>
+
+          {/* Pivot Table */}
+          <div className="mt-8">
+            <h2 className="text-2xl font-bold mb-4 text-center">Stock Data Pivot Table</h2>
+            <table {...getTableProps()} className="w-full border-collapse border border-gray-600">
+              <thead>
+                {headerGroups.map(headerGroup => (
+                  <tr {...headerGroup.getHeaderGroupProps()}>
+                    {headerGroup.headers.map(column => (
+                      <th {...column.getHeaderProps()} className="border border-gray-600 p-2 bg-gray-800">
+                        {column.render('Header')}
+                      </th>
+                    ))}
+                  </tr>
+                ))}
+              </thead>
+              <tbody {...getTableBodyProps()}>
+                {rows.map(row => {
+                  prepareRow(row);
+                  return (
+                    <tr {...row.getRowProps()} className="border border-gray-600">
+                      {row.cells.map(cell => (
+                        <td {...cell.getCellProps()} className="border border-gray-600 p-2 text-center">
+                          {cell.render('Cell')}
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 

@@ -8,7 +8,7 @@ class Client:
     """
     A client for interacting with the Portfolio Optimizer API.
     """
-    BASE_URL = "https://api.portfoliooptimizer.io/v1"
+    BASE_URL = "http://127.0.0.1:8000/api"
 
     @classmethod
     def analyze_absorption_ratio(cls, assets: int, covariance_matrix: list[list[float]]) -> Optional[float]:

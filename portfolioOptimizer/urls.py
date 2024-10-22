@@ -22,4 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('api.urls')),  # Your API URLs
     path('accountsUser/', include('accountsUser.urls')),  # Update the accounts app URL
+    path('__debug__/', include('debug_toolbar.urls')),
 ]

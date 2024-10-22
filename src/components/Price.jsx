@@ -10,7 +10,7 @@ function Price() {
 
     const fetchPrice = async () => {
         try {
-            const response = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${ticker}&apikey=8PGDFL6JGOQEL6AI`);
+            const response = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${ticker}&apikey=${process.env.ALPHAVANTAGE_API_TOKEN}`);
             const result = await response.json();
             const timeSeries = result['Time Series (Daily)'];
             setPrices(timeSeries);
