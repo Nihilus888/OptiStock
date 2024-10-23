@@ -57,7 +57,6 @@ export default function LoginForm() {
     } catch (error) {
       console.error('Error:', error);
       toast.error('An error occurred. Please try again later.', {
-        position: toast.POSITION.TOP_CENTER,
         autoClose: 3000,
       });
     }

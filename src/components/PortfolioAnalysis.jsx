@@ -44,8 +44,7 @@ const PortfolioAnalysis = () => {
   const handleAbsorptionSubmit = async (event) => {
     event.preventDefault();
     try {
-      const covarianceArray = JSON.parse(covarianceMatrix);
-      const absorptionRatio = await analyzeAbsorptionRatio(assets, covarianceArray);
+      const absorptionRatio = await analyzeAbsorptionRatio(assets, covarianceMatrix);
       setResults(absorptionRatio);
       setError('');
     } catch (err) {
@@ -57,9 +56,7 @@ const PortfolioAnalysis = () => {
   const handleDiversificationSubmit = async (event) => {
     event.preventDefault();
     try {
-      const covarianceArray = JSON.parse(covarianceMatrix);
-      const portfoliosArray = JSON.parse(portfolios);
-      const diversificationRatio = await analyzeDiversificationRatio(assets, covarianceArray, portfoliosArray);
+      const diversificationRatio = await analyzeDiversificationRatio(assets, covarianceMatrix, portfolios);
       setResults(diversificationRatio);
       setError('');
     } catch (err) {
@@ -71,10 +68,8 @@ const PortfolioAnalysis = () => {
   const handleSharpeSubmit = async (event) => {
     event.preventDefault();
     try {
-      const covarianceArray = JSON.parse(covarianceMatrix);
-      const returnsArray = JSON.parse(assetsReturns);
-      const portfoliosArray = JSON.parse(portfolios);
-      const sharpeRatio = await analyzeSharpeRatio(assets, returnsArray, covarianceArray, riskFreeRate, portfoliosArray);
+      const sharpeRatio = await analyzeSharpeRatio(assets, assetsReturns, covarianceMatrix, assetsReturns, portfolios);
+      console.log(sharpeRatio);
       setResults(sharpeRatio);
       setError('');
     } catch (err) {
@@ -86,9 +81,7 @@ const PortfolioAnalysis = () => {
   const handleInvestablePortfolioSubmit = async (event) => {
     event.preventDefault();
     try {
-      const pricesArray = JSON.parse(assetPrices);
-      const weightsArray = JSON.parse(assetWeights);
-      const investablePortfolio = await createInvestablePortfolio(assets, pricesArray, weightsArray, portfolioValue);
+      const investablePortfolio = await createInvestablePortfolio(assets, assetPrices, assetWeights, portfolioValue);
       setResults(investablePortfolio);
       setError('');
     } catch (err) {
