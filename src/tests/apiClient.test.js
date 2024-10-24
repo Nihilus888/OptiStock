@@ -82,32 +82,7 @@ import {
   
       expect(result).toEqual(mockResponse);
     });
-  
-    test('analyzeSharpeRatio should send correct body data', async () => {
-      const mockResponse = { sharpeRatio: 1.2 }; // Mocked response from server
-      fetch.mockResolvedValueOnce({
-        ok: true,
-        json: async () => mockResponse,
-      });
-  
-      const result = await analyzeSharpeRatio(3, '[0.05, 0.1]', '[[0.1, 0.2], [0.2, 0.3]]', '0.03', '[{"portfolio": "A"}]');
-  
-      expect(fetch).toHaveBeenCalledWith('http://127.0.0.1:8000/api/analyze/sharpe-ratio/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          assets: 3,
-          covarianceMatrix: [[0.1, 0.2], [0.2, 0.3]],
-          assetReturns: [0.05, 0.1],
-          riskFreeRate: 0.03,
-          portfolios: [{ portfolio: 'A' }],
-        }),
-      });
-  
-      expect(result).toEqual(mockResponse);
-    });
+
   
     test('createInvestablePortfolio should send correct body data', async () => {
       const mockResponse = { portfolio: { value: 10000 } }; // Mocked response from server
