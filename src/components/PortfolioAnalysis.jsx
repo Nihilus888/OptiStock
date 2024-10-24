@@ -68,15 +68,16 @@ const PortfolioAnalysis = () => {
   const handleSharpeSubmit = async (event) => {
     event.preventDefault();
     try {
-      const sharpeRatio = await analyzeSharpeRatio(assets, assetsReturns, covarianceMatrix, assetsReturns, portfolios);
-      console.log(sharpeRatio);
+      // Pass the parameters in the correct order: assets, assetsReturns, covarianceMatrix, riskFreeRate, portfolios
+      const sharpeRatio = await analyzeSharpeRatio(assets, assetsReturns, covarianceMatrix, riskFreeRate, portfolios);
       setResults(sharpeRatio);
       setError('');
     } catch (err) {
-      setError('An error occurred while analyzing the data.');
+      setError('An error occurred while analyzing the Sharpe ratio.');
       setResults(null);
     }
   };
+  
 
   const handleInvestablePortfolioSubmit = async (event) => {
     event.preventDefault();
@@ -233,10 +234,10 @@ const PortfolioAnalysis = () => {
               <input
                 type="number"
                 value={riskFreeRate}
-                onChange={(e) => setRiskFreeRate(e.target.value)}
+                onChange={(e) => setRiskFreeRate(parseFloat(e.target.value) || 0)}
                 className="border border-gray-300 p-2 rounded w-full"
                 required
-              />
+            />
             </div>
             <div>
               <label className="block text-sm font-medium mb-1 text-white">Portfolios (JSON format)</label>

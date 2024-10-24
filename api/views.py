@@ -93,6 +93,8 @@ def investable_portfolio_view(request):
     asset_weights = data.get('assetWeights')
     portfolio_value = data.get('portfolioValue')
 
+    print(data)
+
     if assets is None or asset_prices is None or asset_weights is None or portfolio_value is None:
         return JsonResponse({'error': 'Missing required fields'}, status=400)
 

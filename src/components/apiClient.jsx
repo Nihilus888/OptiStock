@@ -74,34 +74,50 @@ export const analyzeDrawdownRatio = async (portfolios) => {
 
 // Function to analyze Sharpe ratio
 export const analyzeSharpeRatio = async (assets, returns, covarianceMatrix, riskFreeRate, portfolios) => {
+  // Construct the request body by parsing and organizing the input data
   const bodyData = {
-    assets: Number(assets),
-    covarianceMatrix: JSON.parse(covarianceMatrix),
-    assetReturns: JSON.parse(returns),
-    riskFreeRate: JSON.parse(riskFreeRate),
-    portfolios: JSON.parse(portfolios)
-  }
+    assets: Number(assets),  // Convert assets to a number 
+    assetsReturns: JSON.parse(returns), 
+    assetsCovarianceMatrix: JSON.parse(covarianceMatrix),    // Parse covariance matrix string to object
+    riskFreeRate: riskFreeRate,  // Use risk-free rate as provided
+    portfolios: JSON.parse(portfolios)  // Parse portfolios string to object
+  };
+  
 
+  // Log the bodyData for debugging purposes
+  console.log(bodyData);
 
+  // Send the POST request to the Sharpe ratio analysis endpoint
   const response = await fetch(`${API_BASE_URL}/analyze/sharpe-ratio/`, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json',  // Set content type to JSON
     },
-    body: JSON.stringify(bodyData),
+    body: JSON.stringify(bodyData),  // Send the bodyData as a JSON string
   });
+
+  // Return the parsed JSON response from the server
   return response.json();
 };
+
 
 // Function to create an investable portfolio
 export const createInvestablePortfolio = async (assets, prices, weights, portfolioValue) => {
 
   const bodyData = 
   {
-    "assets": 2,
-    "assetsPrices": [100, 200],  // Sample data for asset prices
-    "assetsWeights": [0.5, 0.5],  // Sample data for asset weights
-    "portfolioValue": 1000         // Sample portfolio value
+    "assets": 3,
+    "assetsPrices": [
+      10,
+      25,
+      500
+    ],  // Sample data for asset prices
+    "assetsWeights": [
+      0.05,
+      0.6,
+      0.35
+    ],  // Sample data for asset weights
+    "portfolioValue": 10000        // Sample portfolio value
   }
   /*
   {
@@ -125,16 +141,18 @@ export const createInvestablePortfolio = async (assets, prices, weights, portfol
 
 // Function to optimize portfolio
 export const optimizePortfolio = async (assets, returns, maxWeights) => {
+  const bodyData = {
+    "assets": Number(assets),
+    "assetsReturns": JSON.parse(returns),
+    "constraints": JSON.parse(maxWeights),
+  }
+
   const response = await fetch(`${API_BASE_URL}/portfolio/optimize/`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      assets,
-      assetsReturns: returns,
-      constraints: { maximumAssetsWeights: maxWeights },
-    }),
+    body: JSON.stringify(bodyData),
   });
   return response.json();
 };

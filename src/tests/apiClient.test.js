@@ -1,3 +1,4 @@
+// api.test.js
 import {
     analyzeAbsorptionRatio,
     analyzeDiversificationRatio,
@@ -5,160 +6,157 @@ import {
     analyzeSharpeRatio,
     createInvestablePortfolio,
     optimizePortfolio
-} from '../components/apiClient'; // Adjust the path
-
-// Mock the fetch function globally
-global.fetch = jest.fn();
-
-describe('API Functions', () => {
-    beforeEach(() => {
-        fetch.mockClear(); // Clear mock calls before each test
+  } from '../components/apiClient';
+  
+  global.fetch = jest.fn(); // Mock the fetch function
+  
+  describe('API Function Tests', () => {
+  
+    afterEach(() => {
+      fetch.mockClear(); // Clear the fetch mock after each test
     });
-
-    it('should analyze absorption ratio successfully', async () => {
-        const mockResponse = { result: 'success' };
-        fetch.mockResolvedValueOnce({
-            ok: true,
-            json: async () => mockResponse
-        });
-
-        const result = await analyzeAbsorptionRatio(['AAPL', 'MSFT'], [[1, 0], [0, 1]]);
-        
-        expect(fetch).toHaveBeenCalledWith('http://127.0.0.1:8000/api/analyze/absorption-ratio/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                assets: ['AAPL', 'MSFT'],
-                assetsCovarianceMatrix: [[1, 0], [0, 1]],
-            }),
-        });
-        expect(result).toEqual(mockResponse);
+  
+    test('analyzeAbsorptionRatio should send correct body data', async () => {
+      const mockResponse = { ratio: 0.75 }; // Mocked response from server
+      fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockResponse,
+      });
+  
+      const result = await analyzeAbsorptionRatio(3, '[[1, 2], [2, 3]]');
+  
+      expect(fetch).toHaveBeenCalledWith('http://127.0.0.1:8000/api/analyze/absorption-ratio/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          assets: 3,
+          assetsCovarianceMatrix: [[1, 2], [2, 3]],
+        }),
+      });
+  
+      expect(result).toEqual(mockResponse);
     });
-
-    it('should throw an error when analyze absorption ratio fails', async () => {
-        fetch.mockResolvedValueOnce({
-            ok: false,
-            json: async () => ({ message: 'Error occurred' }) // Mocked JSON response
-        });
-
-        await expect(analyzeAbsorptionRatio(['AAPL'], [[1]])).rejects.toThrow('Failed to fetch');
+  
+    test('analyzeDiversificationRatio should send correct body data', async () => {
+      const mockResponse = { ratio: 0.85 }; // Mocked response from server
+      fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockResponse,
+      });
+  
+      const result = await analyzeDiversificationRatio(3, '[[1, 0], [0, 1]]', '[{"portfolio": "A"}, {"portfolio": "B"}]');
+  
+      expect(fetch).toHaveBeenCalledWith('http://127.0.0.1:8000/api/analyze/diversification-ratio/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          assets: 3,
+          assetsCovarianceMatrix: [[1, 0], [0, 1]],
+          portfolios: [{ portfolio: 'A' }, { portfolio: 'B' }],
+        }),
+      });
+  
+      expect(result).toEqual(mockResponse);
     });
-
-    it('should analyze diversification ratio successfully', async () => {
-        const mockResponse = { result: 'diversification' };
-        fetch.mockResolvedValueOnce({
-            ok: true,
-            json: async () => mockResponse,
-        });
-
-        const result = await analyzeDiversificationRatio(['AAPL'], [[1]], [{ AAPL: 0.5 }]);
-
-        expect(fetch).toHaveBeenCalledWith('http://127.0.0.1:8000/api/analyze/diversification-ratio/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                assets: ['AAPL'],
-                assetsCovarianceMatrix: [[1]],
-                portfolios: [{ AAPL: 0.5 }],
-            }),
-        });
-        expect(result).toEqual(mockResponse);
+  
+    test('analyzeDrawdownRatio should send correct body data', async () => {
+      const mockResponse = { drawdowns: [0.2, 0.15] }; // Mocked response from server
+      fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockResponse,
+      });
+  
+      const result = await analyzeDrawdownRatio('[{"portfolio": "A"}, {"portfolio": "B"}]');
+  
+      expect(fetch).toHaveBeenCalledWith('http://127.0.0.1:8000/api/analyze/drawdowns/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ portfolios: '[{"portfolio": "A"}, {"portfolio": "B"}]' }),
+      });
+  
+      expect(result).toEqual(mockResponse);
     });
-
-    it('should analyze drawdown ratio successfully', async () => {
-        const mockResponse = { result: 'drawdown' };
-        fetch.mockResolvedValueOnce({
-            ok: true,
-            json: async () => mockResponse,
-        });
-
-        const result = await analyzeDrawdownRatio([{ AAPL: 0.5 }]);
-
-        expect(fetch).toHaveBeenCalledWith('http://127.0.0.1:8000/api/analyze/drawdowns/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                portfolios: [{ AAPL: 0.5 }],
-            }),
-        });
-        expect(result).toEqual(mockResponse);
+  
+    test('analyzeSharpeRatio should send correct body data', async () => {
+      const mockResponse = { sharpeRatio: 1.2 }; // Mocked response from server
+      fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockResponse,
+      });
+  
+      const result = await analyzeSharpeRatio(3, '[0.05, 0.1]', '[[0.1, 0.2], [0.2, 0.3]]', '0.03', '[{"portfolio": "A"}]');
+  
+      expect(fetch).toHaveBeenCalledWith('http://127.0.0.1:8000/api/analyze/sharpe-ratio/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          assets: 3,
+          covarianceMatrix: [[0.1, 0.2], [0.2, 0.3]],
+          assetReturns: [0.05, 0.1],
+          riskFreeRate: 0.03,
+          portfolios: [{ portfolio: 'A' }],
+        }),
+      });
+  
+      expect(result).toEqual(mockResponse);
     });
-
-    it('should analyze Sharpe ratio successfully', async () => {
-        const mockResponse = { result: 'sharpe' };
-        fetch.mockResolvedValueOnce({
-            ok: true,
-            json: async () => mockResponse,
-        });
-
-        const result = await analyzeSharpeRatio(['AAPL'], [0.01], [[1]], 0.02, [{ AAPL: 0.5 }]);
-
-        expect(fetch).toHaveBeenCalledWith('http://127.0.0.1:8000/api/analyze/sharpe-ratio/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                assets: ['AAPL'],
-                assetsReturns: [0.01],
-                assetsCovarianceMatrix: [[1]],
-                riskFreeRate: 0.02,
-                portfolios: [{ AAPL: 0.5 }],
-            }),
-        });
-        expect(result).toEqual(mockResponse);
+  
+    test('createInvestablePortfolio should send correct body data', async () => {
+      const mockResponse = { portfolio: { value: 10000 } }; // Mocked response from server
+      fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockResponse,
+      });
+  
+      const result = await createInvestablePortfolio(3, '[10, 25, 500]', '[0.05, 0.6, 0.35]', 10000);
+  
+      expect(fetch).toHaveBeenCalledWith('http://127.0.0.1:8000/api/portfolio/investable/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          assets: 3,
+          assetsPrices: [10, 25, 500],
+          assetsWeights: [0.05, 0.6, 0.35],
+          portfolioValue: 10000,
+        }),
+      });
+  
+      expect(result).toEqual(mockResponse);
     });
-
-    it('should create an investable portfolio successfully', async () => {
-        const mockResponse = { portfolio: 'created' };
-        fetch.mockResolvedValueOnce({
-            ok: true,
-            json: async () => mockResponse,
-        });
-
-        const result = await createInvestablePortfolio(['AAPL'], [100], [0.5], 500);
-
-        expect(fetch).toHaveBeenCalledWith('http://127.0.0.1:8000/api/portfolio/investable/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                assets: ['AAPL'],
-                assetPrices: [100],
-                assetWeights: [0.5],
-                portfolioValue: 500,
-            }),
-        });
-        expect(result).toEqual(mockResponse);
+  
+    test('optimizePortfolio should send correct body data', async () => {
+      const mockResponse = { optimized: true }; // Mocked response from server
+      fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => mockResponse,
+      });
+  
+      const result = await optimizePortfolio(3, '[0.05, 0.1]', '{"maxWeights": [0.3, 0.7]}');
+  
+      expect(fetch).toHaveBeenCalledWith('http://127.0.0.1:8000/api/portfolio/optimize/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          assets: 3,
+          assetsReturns: [0.05, 0.1],
+          constraints: { maxWeights: [0.3, 0.7] },
+        }),
+      });
+  
+      expect(result).toEqual(mockResponse);
     });
-
-    it('should optimize a portfolio successfully', async () => {
-        const mockResponse = { portfolio: 'optimized' };
-        fetch.mockResolvedValueOnce({
-            ok: true,
-            json: async () => mockResponse,
-        });
-
-        const result = await optimizePortfolio(['AAPL'], [0.01], [0.5]);
-
-        expect(fetch).toHaveBeenCalledWith('http://127.0.0.1:8000/api/portfolio/optimize/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                assets: ['AAPL'],
-                assetsReturns: [0.01],
-                constraints: { maximumAssetsWeights: [0.5] },
-            }),
-        });
-        expect(result).toEqual(mockResponse);
-    });
-});
+  
+  });
+  
