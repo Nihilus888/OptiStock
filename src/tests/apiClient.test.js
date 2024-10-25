@@ -82,7 +82,6 @@ import {
   
       expect(result).toEqual(mockResponse);
     });
-
   
     test('createInvestablePortfolio should send correct body data', async () => {
       const mockResponse = { portfolio: { value: 10000 } }; // Mocked response from server
