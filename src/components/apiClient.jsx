@@ -7,8 +7,6 @@ export const analyzeAbsorptionRatio = async (assets, covarianceArray) => {
       assetsCovarianceMatrix: JSON.parse(covarianceArray) // This should be an array (e.g., [[9, 1], [1, 1]])
   };
 
-  console.log('Request body:', bodyData);  // Log the request body to ensure correct types
-
   try {
       const response = await fetch(`${API_BASE_URL}/analyze/absorption-ratio/`, {
           method: 'POST',
@@ -19,17 +17,13 @@ export const analyzeAbsorptionRatio = async (assets, covarianceArray) => {
           body: JSON.stringify(bodyData),  // Convert body to JSON string
       });
 
-      console.log('Raw Response:', response);  // Log the raw response
-
       if (!response.ok) {
           // Log the error response for debugging
           const errorData = await response.json();
-          console.error('Error Response:', errorData);
           throw new Error('Failed to fetch');
       }
 
       const result = await response.json();  // Parse and return the JSON response
-      console.log('Parsed Response:', result);
       return result;
 
   } catch (error) {
@@ -48,7 +42,6 @@ export const analyzeDiversificationRatio = async (assets, covarianceMatrix, port
     portfolios: JSON.parse(portfolios) // Assuming portfolios is already an array of objects
   };
 
-  console.log('bodyData', bodyData);
   const response = await fetch(`${API_BASE_URL}/analyze/diversification-ratio/`, {
     method: 'POST',
     headers: {
@@ -82,10 +75,6 @@ export const analyzeSharpeRatio = async (assets, returns, covarianceMatrix, risk
     riskFreeRate: riskFreeRate,  // Use risk-free rate as provided
     portfolios: JSON.parse(portfolios)  // Parse portfolios string to object
   };
-  
-
-  // Log the bodyData for debugging purposes
-  console.log(bodyData);
 
   // Send the POST request to the Sharpe ratio analysis endpoint
   const response = await fetch(`${API_BASE_URL}/analyze/sharpe-ratio/`, {
@@ -106,28 +95,11 @@ export const createInvestablePortfolio = async (assets, prices, weights, portfol
 
   const bodyData = 
   {
-    "assets": 3,
-    "assetsPrices": [
-      10,
-      25,
-      500
-    ],  // Sample data for asset prices
-    "assetsWeights": [
-      0.05,
-      0.6,
-      0.35
-    ],  // Sample data for asset weights
-    "portfolioValue": 10000        // Sample portfolio value
-  }
-  /*
-  {
     assets: Number(assets),
     assetsPrices: JSON.parse(prices),
     assetsWeights: JSON.parse(weights),
     portfolioValue: Number(portfolioValue)
   }
-  */
-  console.log(bodyData);
 
   const response = await fetch(`${API_BASE_URL}/portfolio/investable/`, {
     method: 'POST',
