@@ -12,16 +12,12 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Create Virtual Environment
+          name: Set Up Python Virtual Environment
           command: |
             python -m venv venv  # Create a virtual environment
-            echo "source venv/bin/activate" >> $BASH_ENV  # Activate the virtual environment for subsequent steps
-            source venv/bin/activate  # Activate it immediately in this step
-      - run:
-          name: Install Python Dependencies
-          command: |
-            source venv/bin/activate  # Activate the virtual environment
+            . venv/bin/activate  # Activate the virtual environment
             pip install -r requirements.txt  # Install Django dependencies
+
       - run:
           name: Wait for PostgreSQL
           command: |
@@ -34,11 +30,12 @@ jobs:
               echo "PostgreSQL is unavailable - waiting..."
               sleep 1
             done
+
       - run:
           name: Migrate Database
           command: |
-            source venv/bin/activate  # Activate the virtual environment
-            python manage.py migrate
+            . venv/bin/activate  # Activate the virtual environment
+            python manage.py migrate  # Run migrations
 
   test:
     docker:
@@ -47,26 +44,23 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Create Virtual Environment
+          name: Set Up Python Virtual Environment
           command: |
             python -m venv venv  # Create a virtual environment
-            echo "source venv/bin/activate" >> $BASH_ENV  # Activate the virtual environment for subsequent steps
-            source venv/bin/activate  # Activate it immediately in this step
-      - run:
-          name: Install Python Dependencies
-          command: |
-            source venv/bin/activate  # Activate the virtual environment
+            . venv/bin/activate  # Activate the virtual environment
             pip install -r requirements.txt  # Install Django dependencies
+
       - run:
           name: Run Django Tests
           command: |
-            source venv/bin/activate  # Activate the virtual environment
-            python manage.py test
+            . venv/bin/activate  # Activate the virtual environment
+            python manage.py test  # Run Django tests
+
       - run:
           name: Run Frontend Tests
           command: |
             cd portfolioOptimizer
-            npm test -- --watchAll=false
+            npm test -- --watchAll=false  # Run frontend tests
 
   deploy:
     docker:
