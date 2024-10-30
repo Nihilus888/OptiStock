@@ -30,26 +30,6 @@ jobs:
       - run:
           name: Migrate Database
           command: python manage.py migrate
-      - run:
-          name: Run Django Tests
-          command: python manage.py test
-      - run:
-          name: Check Node.js and npm Versions
-          command: |
-            echo "Checking Node.js version..."
-            node -v
-            echo "Checking npm version..."
-            npm -v
-      - run:
-          name: Install Node.js Dependencies
-          command: |
-            cd portfolioOptimizer
-            npm install 
-      - run:
-          name: Run Frontend Tests
-          command: |
-            cd portfolioOptimizer
-            npm test -- --watchAll=false
 
   lint:
     docker:
@@ -60,25 +40,43 @@ jobs:
           name: Run ESLint
           command: |
             cd portfolioOptimizer
-            npm run lint -- --verbose  # Add --verbose for more detailed output
+            npm run lint -- --verbose
+
+  test:
+    docker:
+      - image: circleci/python:3.9-node
+      - image: circleci/postgres:latest
+    steps:
+      - checkout
+      - run:
+          name: Run Django Tests
+          command: python manage.py test
+      - run:
+          name: Run Frontend Tests
+          command: |
+            cd portfolioOptimizer
+            npm test -- --watchAll=false
 
   deploy:
     docker:
-      - image: circleci/python:3.9
+      - image: circleci/python:3.9-node
     steps:
       - checkout
       - run:
           name: Deploy Application
-          command: echo "Deploying application..."
+          command: |
+            # Your deployment commands here
 
 workflows:
   version: 2
   build_and_test:
     jobs:
       - build
-      - lint:
+      - lint
+      - test:
           requires:
             - build
+            - lint
       - deploy:
           requires:
-            - build
+            - test
