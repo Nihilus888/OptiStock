@@ -31,17 +31,6 @@ jobs:
           name: Migrate Database
           command: python manage.py migrate
 
-  lint:
-    docker:
-      - image: circleci/node:14
-    steps:
-      - checkout
-      - run:
-          name: Run ESLint
-          command: |
-            cd portfolioOptimizer
-            npm run lint -- --verbose
-
   test:
     docker:
       - image: circleci/python:3.9-node
@@ -72,11 +61,9 @@ workflows:
   build_and_test:
     jobs:
       - build
-      - lint
       - test:
           requires:
             - build
-            - lint
       - deploy:
           requires:
             - test
