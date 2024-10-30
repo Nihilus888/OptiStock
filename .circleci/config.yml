@@ -3,19 +3,19 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/python:3.9-node
-      - image: circleci/postgres:latest
+      - image: circleci/python:3.9-node  # Use a convenience image that includes both Python and Node.js
+      - image: circleci/postgres:latest  # PostgreSQL service image
         environment:
-          POSTGRES_DB: portfolio
-          POSTGRES_USER: elliotttay
-          POSTGRES_PASSWORD: your_secure_password  # Set a secure password
-          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_DB: portfolio  # Database name
+          POSTGRES_USER: elliotttay  # Database user
+          POSTGRES_PASSWORD: your_secure_password  # Set a secure password here
+          POSTGRES_HOST_AUTH_METHOD: trust  # Note: using trust is not recommended for production
     steps:
-      - checkout
+      - checkout  # Check out your code
       - run:
           name: Install Python Dependencies
           command: |
-            pip install -r requirements.txt
+            pip install -r requirements.txt  # Install Django dependencies
       - run:
           name: Wait for PostgreSQL
           command: |
@@ -28,36 +28,53 @@ jobs:
               echo "PostgreSQL is unavailable - waiting..."
               sleep 1
             done
+      - run:
+          name: Migrate Database
+          command: python manage.py migrate
 
   test:
     docker:
-      - image: circleci/python:3.9-node
-      - image: circleci/postgres:latest
+      - image: circleci/python:3.9-node  # Use a convenience image that includes both Python and Node.js
+      - image: circleci/postgres:latest  # PostgreSQL service image
         environment:
-          POSTGRES_DB: portfolio
-          POSTGRES_USER: elliotttay
-          POSTGRES_PASSWORD: your_secure_password  # Set the same secure password
-          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_DB: portfolio  # Database name
+          POSTGRES_USER: elliotttay  # Database user
+          POSTGRES_PASSWORD: your_secure_password  # Set a secure password here
+          POSTGRES_HOST_AUTH_METHOD: trust  # Note: using trust is not recommended for production
     steps:
-      - checkout
+      - checkout  # Check out your code
+      - run:
+          name: Wait for PostgreSQL in Test
+          command: |
+            echo "Waiting for PostgreSQL to start..."
+            for i in {30..0}; do
+              if pg_isready -h localhost -p 5432; then
+                echo "PostgreSQL is up!"
+                break
+              fi
+              echo "PostgreSQL is unavailable - waiting..."
+              sleep 1
+            done
       - run:
           name: Run Django Tests
           command: python manage.py test
+      - run:
+          name: Check Node.js and npm Versions
+          command: |
+            echo "Checking Node.js version..."
+            node -v
+            echo "Checking npm version..."
+            npm -v
+      - run:
+          name: Install Node.js Dependencies
+          command: |
+            cd portfolioOptimizer
+            npm install 
       - run:
           name: Run Frontend Tests
           command: |
             cd portfolioOptimizer
             npm test -- --watchAll=false
-
-  deploy:
-    docker:
-      - image: circleci/python:3.9-node
-    steps:
-      - checkout
-      - run:
-          name: Deploy Application
-          command: |
-            # Your deployment commands here
 
 workflows:
   version: 2
@@ -67,6 +84,3 @@ workflows:
       - test:
           requires:
             - build
-      - deploy:
-          requires:
-            - test
