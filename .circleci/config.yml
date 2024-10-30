@@ -8,6 +8,7 @@ jobs:
         environment:
           POSTGRES_DB: portfolio
           POSTGRES_USER: elliotttay
+          POSTGRES_PASSWORD: your_secure_password  # Set a secure password
           POSTGRES_HOST_AUTH_METHOD: trust
     steps:
       - checkout
@@ -32,6 +33,11 @@ jobs:
     docker:
       - image: circleci/python:3.9-node
       - image: circleci/postgres:latest
+        environment:
+          POSTGRES_DB: portfolio
+          POSTGRES_USER: elliotttay
+          POSTGRES_PASSWORD: your_secure_password  # Set the same secure password
+          POSTGRES_HOST_AUTH_METHOD: trust
     steps:
       - checkout
       - run:
