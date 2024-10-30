@@ -12,9 +12,16 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Create Virtual Environment
+          command: |
+            python -m venv venv  # Create a virtual environment
+            echo "source venv/bin/activate" >> $BASH_ENV  # Activate the virtual environment for subsequent steps
+            source venv/bin/activate  # Activate it immediately in this step
+      - run:
           name: Install Python Dependencies
           command: |
-            pip install -r requirements.txt
+            source venv/bin/activate  # Activate the virtual environment
+            pip install -r requirements.txt  # Install Django dependencies
       - run:
           name: Wait for PostgreSQL
           command: |
@@ -29,7 +36,9 @@ jobs:
             done
       - run:
           name: Migrate Database
-          command: python manage.py migrate
+          command: |
+            source venv/bin/activate  # Activate the virtual environment
+            python manage.py migrate
 
   test:
     docker:
@@ -38,8 +47,21 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Create Virtual Environment
+          command: |
+            python -m venv venv  # Create a virtual environment
+            echo "source venv/bin/activate" >> $BASH_ENV  # Activate the virtual environment for subsequent steps
+            source venv/bin/activate  # Activate it immediately in this step
+      - run:
+          name: Install Python Dependencies
+          command: |
+            source venv/bin/activate  # Activate the virtual environment
+            pip install -r requirements.txt  # Install Django dependencies
+      - run:
           name: Run Django Tests
-          command: python manage.py test
+          command: |
+            source venv/bin/activate  # Activate the virtual environment
+            python manage.py test
       - run:
           name: Run Frontend Tests
           command: |
