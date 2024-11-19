@@ -48,6 +48,7 @@ const NavBar = () => {
               <Link to="/dashboard" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">Dashboard</Link>
               <Link to="/portfolio-analysis" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">Portfolio Analysis</Link>
               <Link to="/company-analysis" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">Balance Sheet</Link>
+              <Link to="/income-statement" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">Income Statement</Link>
               <button onClick={handleLogout} className="text-white px-4 hover:text-blue-400 transition-colors duration-300">Logout</button>
             </>
           ) : (

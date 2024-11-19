@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-export default function CompanyAnalysis() {
+export default function BalanceSheet() {
     const [ticker, setTicker] = useState('');
     const [company, setCompany] = useState([]);
     const [loading, setLoading] = useState(false);
