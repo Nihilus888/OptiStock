@@ -91,8 +91,10 @@ export default function IncomeStatement() {
                             <p>Reported Currency: {report.reportedCurrency || 'N/A'}</p>
                             <p>Gross Profit: {report.grossProfit || 'N/A'}</p>
                             <p>Total Revenue: {report.totalRevenue || 'N/A'}</p>
+                            <p>Net Interest Income: {report.netInterestIncome || 'N/A'}</p>
                             <p>Selling General and Administrative: {report.sellingGeneralAndAdministrative || 'N/A'}</p>
                             <p>Operating Expenses: {report.operatingExpenses || 'N/A'}</p>
+                            <p>Interest Expense: {report.interestExpense || 'N/A'}</p>
                             <p>Depreciation: {report.depreciation || 'N/A'}</p>
                             <p>EBITDA: {report.ebitda || 'N/A'}</p>
                             <p>EBIT: {report.ebit || 'N/A'}</p>                      
