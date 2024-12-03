@@ -12,10 +12,17 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust  # Note: using trust is not recommended for production
     steps:
       - checkout  # Check out your code
+      - restore_cache:
+          keys:
+            - v1-pip-cache-{{ checksum "requirements.txt" }}
       - run:
           name: Install Python Dependencies
           command: |
-            pip install -r requirements.txt  # Install Django dependencies
+            pip install --default-timeout=100 -r requirements.txt  # Install Django dependencies with extended timeout
+      - save_cache:
+          paths:
+            - ~/.cache/pip
+          key: v1-pip-cache-{{ checksum "requirements.txt" }}
       - run:
           name: Wait for PostgreSQL
           command: |
@@ -43,6 +50,9 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust  # Note: using trust is not recommended for production
     steps:
       - checkout  # Check out your code
+      - restore_cache:
+          keys:
+            - v1-pip-cache-{{ checksum "requirements.txt" }}
       - run:
           name: Wait for PostgreSQL in Test
           command: |
@@ -58,7 +68,7 @@ jobs:
       - run:
           name: Install Python Dependencies
           command: |
-            pip install -r requirements.txt  # Install Django dependencies
+            pip install --default-timeout=100 -r requirements.txt  # Install Django dependencies with extended timeout
       - run:
           name: Run Django Tests
           command: python manage.py test
