@@ -7,7 +7,7 @@ psycopg2==2.9.9
 python-decouple==3.8
 requests==2.32.3
 sqlparse==0.5.1
-urllib3==2.2.3
+urllib3>=1.24, <2.0  # Adjusted to be compatible with requests and alpaca-trade-api
 djangorestframework==3.14.0  
 django-cors-headers==3.13.0  
 djangorestframework-simplejwt
