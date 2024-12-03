@@ -12,17 +12,26 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust  # Note: using trust is not recommended for production
     steps:
       - checkout  # Check out your code
+      
+      # Upgrade pip to the latest version for faster and more efficient dependency resolution
+      - run:
+          name: Upgrade pip
+          command: python -m pip install --upgrade pip
+      
       - restore_cache:
           keys:
-            - v1-pip-cache-{{ checksum "requirements.txt" }}
+            - v1-pip-cache-{{ checksum "requirements.txt" }}  # Use checksum for better cache validation
+
       - run:
           name: Install Python Dependencies
           command: |
-            pip install --default-timeout=100 -r requirements.txt  # Install Django dependencies with extended timeout
+            pip install --default-timeout=100 --use-deprecated=legacy-resolver -r requirements.txt  # Install Django dependencies
+      
       - save_cache:
           paths:
             - ~/.cache/pip
           key: v1-pip-cache-{{ checksum "requirements.txt" }}
+
       - run:
           name: Wait for PostgreSQL
           command: |
@@ -35,6 +44,7 @@ jobs:
               echo "PostgreSQL is unavailable - waiting..."
               sleep 1
             done
+
       - run:
           name: Migrate Database
           command: python manage.py migrate
@@ -50,9 +60,15 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust  # Note: using trust is not recommended for production
     steps:
       - checkout  # Check out your code
+      
       - restore_cache:
           keys:
             - v1-pip-cache-{{ checksum "requirements.txt" }}
+
+      - run:
+          name: Upgrade pip
+          command: python -m pip install --upgrade pip
+
       - run:
           name: Wait for PostgreSQL in Test
           command: |
@@ -65,13 +81,16 @@ jobs:
               echo "PostgreSQL is unavailable - waiting..."
               sleep 1
             done
+
       - run:
           name: Install Python Dependencies
           command: |
-            pip install --default-timeout=100 -r requirements.txt  # Install Django dependencies with extended timeout
+            pip install --default-timeout=100 --use-deprecated=legacy-resolver -r requirements.txt  # Install Django dependencies
+
       - run:
           name: Run Django Tests
           command: python manage.py test
+
       - run:
           name: Check Node.js and npm Versions
           command: |
@@ -79,11 +98,13 @@ jobs:
             node -v
             echo "Checking npm version..."
             npm -v
+
       - run:
           name: Install Node.js Dependencies
           command: |
             cd portfolioOptimizer
             npm install 
+
       - run:
           name: Run Frontend Tests
           command: |
