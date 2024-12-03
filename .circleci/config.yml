@@ -1,121 +1,31 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine.
+# See: https://circleci.com/docs/configuration-reference
 version: 2.1
 
+# Define a job to be invoked later in a workflow.
+# See: https://circleci.com/docs/jobs-steps/#jobs-overview & https://circleci.com/docs/configuration-reference/#jobs
 jobs:
-  build:
+  say-hello:
+    # Specify the execution environment. You can specify an image from Docker Hub or use one of our convenience images from CircleCI's Developer Hub.
+    # See: https://circleci.com/docs/executor-intro/ & https://circleci.com/docs/configuration-reference/#executor-job
     docker:
-      - image: circleci/python:3.10-node  # Use a convenience image that includes both Python and Node.js
-      - image: circleci/postgres:latest  # PostgreSQL service image
-        environment:
-          POSTGRES_DB: portfolio  # Database name
-          POSTGRES_USER: elliotttay  # Database user
-          POSTGRES_PASSWORD: your_secure_password  # Set a secure password here
-          POSTGRES_HOST_AUTH_METHOD: trust  # Note: using trust is not recommended for production
+      # Specify the version you desire here
+      # See: https://circleci.com/developer/images/image/cimg/base
+      - image: cimg/base:current
+
+    # Add steps to the job
+    # See: https://circleci.com/docs/jobs-steps/#steps-overview & https://circleci.com/docs/configuration-reference/#steps
     steps:
-      - checkout  # Check out your code
-      
-      # Upgrade pip to the latest version for faster and more efficient dependency resolution
+      # Checkout the code as the first step.
+      - checkout
       - run:
-          name: Upgrade pip
-          command: python -m pip install --upgrade pip
-      
-      - restore_cache:
-          keys:
-            - v1-pip-cache-{{ checksum "requirements.txt" }}  # Use checksum for better cache validation
+          name: "Say hello"
+          command: "echo Hello, World!"
 
-      - run:
-          name: Install Python Dependencies
-          command: |
-            pip install --default-timeout=100 --use-deprecated=legacy-resolver -r requirements.txt  # Install Django dependencies
-      
-      - save_cache:
-          paths:
-            - ~/.cache/pip
-          key: v1-pip-cache-{{ checksum "requirements.txt" }}
-
-      - run:
-          name: Wait for PostgreSQL
-          command: |
-            echo "Waiting for PostgreSQL to start..."
-            for i in {30..0}; do
-              if pg_isready -h localhost -p 5432; then
-                echo "PostgreSQL is up!"
-                break
-              fi
-              echo "PostgreSQL is unavailable - waiting..."
-              sleep 1
-            done
-
-      - run:
-          name: Migrate Database
-          command: python manage.py migrate
-
-  test:
-    docker:
-      - image: circleci/python:3.9-node  # Use a convenience image that includes both Python and Node.js
-      - image: circleci/postgres:latest  # PostgreSQL service image
-        environment:
-          POSTGRES_DB: portfolio  # Database name
-          POSTGRES_USER: elliotttay  # Database user
-          POSTGRES_PASSWORD: your_secure_password  # Set a secure password here
-          POSTGRES_HOST_AUTH_METHOD: trust  # Note: using trust is not recommended for production
-    steps:
-      - checkout  # Check out your code
-      
-      - restore_cache:
-          keys:
-            - v1-pip-cache-{{ checksum "requirements.txt" }}
-
-      - run:
-          name: Upgrade pip
-          command: python -m pip install --upgrade pip
-
-      - run:
-          name: Wait for PostgreSQL in Test
-          command: |
-            echo "Waiting for PostgreSQL to start..."
-            for i in {30..0}; do
-              if pg_isready -h localhost -p 5432; then
-                echo "PostgreSQL is up!"
-                break
-              fi
-              echo "PostgreSQL is unavailable - waiting..."
-              sleep 1
-            done
-
-      - run:
-          name: Install Python Dependencies
-          command: |
-            pip install --default-timeout=100 --use-deprecated=legacy-resolver -r requirements.txt  # Install Django dependencies
-
-      - run:
-          name: Run Django Tests
-          command: python manage.py test
-
-      - run:
-          name: Check Node.js and npm Versions
-          command: |
-            echo "Checking Node.js version..."
-            node -v
-            echo "Checking npm version..."
-            npm -v
-
-      - run:
-          name: Install Node.js Dependencies
-          command: |
-            cd portfolioOptimizer
-            npm install 
-
-      - run:
-          name: Run Frontend Tests
-          command: |
-            cd portfolioOptimizer
-            npm test -- --watchAll=false
-
+# Orchestrate jobs using workflows
+# See: https://circleci.com/docs/workflows/ & https://circleci.com/docs/configuration-reference/#workflows
 workflows:
-  version: 2
-  build_and_test:
+  say-hello-workflow: # This is the name of the workflow, feel free to change it to better match your workflow.
+    # Inside the workflow, you define the jobs you want to run.
     jobs:
-      - build
-      - test:
-          requires:
-            - build
+      - say-hello
