@@ -1,6 +1,22 @@
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from .client import Client  # Assuming Client is in client.py
+from tradingbot.tradingbot import MLTrader
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from datetime import datetime
+from alpaca_trade_api.rest import REST, TimeFrame
+from lumibot.brokers import Alpaca
+from lumibot.backtesting import YahooDataBacktesting
+from lumibot.strategies.strategy import Strategy
+from lumibot.traders import Trader
+from datetime import datetime 
+from alpaca_trade_api import REST 
+from timedelta import Timedelta 
+from alpaca_trade_api.rest import REST, TimeFrame
+from tradingbot.tasks import run_trading_bot
+import os
+import re
 
 @api_view(['POST'])
 def analyze_absorption_ratio_view(request):
@@ -128,3 +144,57 @@ def optimize_portfolio_view(request):
     except Exception as e:
         print(f"Error in optimize_portfolio_view: {e}")
         return JsonResponse({'error': 'An error occurred while optimizing the portfolio'}, status=500)
+
+@api_view(['POST'])
+def run_strategy(request):
+    try:
+        # Get API credentials and validate inputs
+        API_KEY = os.getenv("API_KEY_PAPER")
+        API_SECRET = os.getenv("API_SECRET_PAPER")
+        BASE_URL = os.getenv("BASE_URL_PAPER")
+
+        if not all([API_KEY, API_SECRET, BASE_URL]):
+            return JsonResponse(
+                {'error': 'API credentials are not properly configured in environment variables.'}, 
+                status=500
+            )
+
+        symbol = request.data.get('symbol', 'SPY')
+        startDateRequest = request.data.get('startDate', '2023-11-30')
+        endDateRequest = request.data.get('endDate', '2023-12-31')
+
+        try:
+            start_date = datetime.strptime(startDateRequest, '%Y-%m-%d')
+            end_date = datetime.strptime(endDateRequest, '%Y-%m-%d')
+        except ValueError:
+            return JsonResponse(
+                {'error': 'Invalid date format. Use YYYY-MM-DD.'}, 
+                status=400
+            )
+
+        cash_at_risk = request.data.get('cash_at_risk', 0.5)
+        
+        try:
+            cash_at_risk = float(cash_at_risk)
+        except ValueError:
+            return JsonResponse(
+                {'error': 'Invalid cash_at_risk value. It should be a number between 0 and 1.'}, 
+                status=400
+            )
+
+        if not (0 <= cash_at_risk <= 1):
+            return JsonResponse(
+                {'error': 'Invalid cash_at_risk. It should be between 0 and 1.'}, 
+                status=400
+            )
+
+        # Call the Celery task asynchronously
+        run_trading_bot.delay(symbol, start_date, end_date, cash_at_risk)
+
+        # Return response immediately
+        return JsonResponse({
+            'status': 'success',
+            'message': 'Strategy backtest is running in the background.'
+        })
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

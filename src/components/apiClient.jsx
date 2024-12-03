@@ -20,7 +20,7 @@ export const analyzeAbsorptionRatio = async (assets, covarianceArray) => {
       if (!response.ok) {
           // Log the error response for debugging
           const errorData = await response.json();
-          throw new Error('Failed to fetch');
+          throw new Error('Failed to fetch: ', errorData);
       }
 
       const result = await response.json();  // Parse and return the JSON response
@@ -128,3 +128,23 @@ export const optimizePortfolio = async (assets, returns, maxWeights) => {
   });
   return response.json();
 };
+
+// Function to call trading bot
+export const tradingBot = async (symbol, startDate, endDate) => {
+  const bodyData = {
+    "symbol": symbol,
+    "startDate": startDate,
+    "endDate": endDate
+  }
+
+  const response = await fetch(`${API_BASE_URL}/run_strategy/`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(bodyData),
+  })
+
+  console.log(response);
+  return response.json();
+}

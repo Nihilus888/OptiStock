@@ -15,6 +15,7 @@ import Stats from './components/Stats';
 import Price from './components/Price';
 import BalanceSheet from './components/BalanceSheet';
 import IncomeStatement from './components/IncomeStatement';
+import TradingBot from './components/TradingBot'
 
 // Create a PrivateRoute component to protect the authenticated route
 const PrivateRoute = ({ element }) => {
@@ -42,6 +43,7 @@ function App() {
           <Route path="/price" element={<PrivateRoute element={<Price />} />} />
           <Route path="/company-analysis"  element={<PrivateRoute element={<BalanceSheet />} />} />
           <Route path="/income-statement" element={<PrivateRoute element={<IncomeStatement />} /> } />
+          <Route path="/trading-bot" element={<PrivateRoute element={<TradingBot />} /> } />
         </Routes>
         <Footer />
       </Router>

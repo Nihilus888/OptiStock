@@ -6,7 +6,8 @@ from .views import (
     drawdown_ratio_view,
     sharpe_ratio_view,
     investable_portfolio_view,
-    optimize_portfolio_view
+    optimize_portfolio_view,
+    run_strategy
 )
 
 urlpatterns = [
@@ -16,4 +17,5 @@ urlpatterns = [
     path('analyze/sharpe-ratio/', sharpe_ratio_view, name='sharpe_ratio'),
     path('portfolio/investable/', investable_portfolio_view, name='investable_portfolio'),
     path('portfolio/optimize/', optimize_portfolio_view, name='optimize_portfolio'),
+    path('run_strategy/', run_strategy, name="run_strategy")
 ]
