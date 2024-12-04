@@ -1,37 +1,20 @@
 version: 2.1
 
-jobs:
-  build:
-    docker:
-      - image: circleci/python:3.10-node  # Use a convenience image that includes both Python and Node.js
-      - image: circleci/postgres:latest  # PostgreSQL service image
-        environment:
-          POSTGRES_DB: portfolio  # Database name
-          POSTGRES_USER: elliotttay  # Database user
-          POSTGRES_PASSWORD: your_secure_password  # Set a secure password here
-          POSTGRES_HOST_AUTH_METHOD: trust  # Note: using trust is not recommended for production
+commands:
+  setup-python:
     steps:
-      - checkout  # Check out your code
-      
-      # Upgrade pip to the latest version for faster and more efficient dependency resolution
       - run:
           name: Upgrade pip
           command: python -m pip install --upgrade pip
-      
-      - restore_cache:
-          keys:
-            - v1-pip-cache-{{ checksum "requirements.txt" }}  # Use checksum for better cache validation
 
+  install-python-dependencies:
+    steps:
       - run:
           name: Install Python Dependencies
-          command: |
-            pip install --default-timeout=100 --use-deprecated=legacy-resolver -r requirements.txt  # Install Django dependencies
-      
-      - save_cache:
-          paths:
-            - ~/.cache/pip
-          key: v1-pip-cache-{{ checksum "requirements.txt" }}
+          command: pip install --default-timeout=100 --use-deprecated=legacy-resolver -r requirements.txt
 
+  wait-for-postgres:
+    steps:
       - run:
           name: Wait for PostgreSQL
           command: |
@@ -45,52 +28,50 @@ jobs:
               sleep 1
             done
 
+jobs:
+  build:
+    docker:
+      - image: circleci/python:3.10-node  # Backend image
+      - image: circleci/postgres:latest
+        environment:
+          POSTGRES_DB: $DATABASE_NAME
+          POSTGRES_USER: $DATABASE_USER
+          POSTGRES_PASSWORD: $DATABASE_PASSWORD
+    steps:
+      - checkout
+      - setup-python
+      - restore_cache:
+          keys:
+            - v1-pip-cache-{{ checksum "requirements.txt" }}
+      - install-python-dependencies
+      - save_cache:
+          paths:
+            - ~/.cache/pip
+          key: v1-pip-cache-{{ checksum "requirements.txt" }}
+      - wait-for-postgres
       - run:
           name: Migrate Database
           command: python manage.py migrate
 
   test:
     docker:
-      - image: circleci/python:3.9-node  # Use a convenience image that includes both Python and Node.js
-      - image: circleci/postgres:latest  # PostgreSQL service image
+      - image: circleci/python:3.10-node  # Backend image
+      - image: circleci/postgres:latest
         environment:
-          POSTGRES_DB: portfolio  # Database name
-          POSTGRES_USER: elliotttay  # Database user
-          POSTGRES_PASSWORD: your_secure_password  # Set a secure password here
-          POSTGRES_HOST_AUTH_METHOD: trust  # Note: using trust is not recommended for production
+          POSTGRES_DB: $DATABASE_NAME
+          POSTGRES_USER: $DATABASE_USER
+          POSTGRES_PASSWORD: $DATABASE_PASSWORD
     steps:
-      - checkout  # Check out your code
-      
+      - checkout
+      - setup-python
       - restore_cache:
           keys:
             - v1-pip-cache-{{ checksum "requirements.txt" }}
-
-      - run:
-          name: Upgrade pip
-          command: python -m pip install --upgrade pip
-
-      - run:
-          name: Wait for PostgreSQL in Test
-          command: |
-            echo "Waiting for PostgreSQL to start..."
-            for i in {30..0}; do
-              if pg_isready -h localhost -p 5432; then
-                echo "PostgreSQL is up!"
-                break
-              fi
-              echo "PostgreSQL is unavailable - waiting..."
-              sleep 1
-            done
-
-      - run:
-          name: Install Python Dependencies
-          command: |
-            pip install --default-timeout=100 --use-deprecated=legacy-resolver -r requirements.txt  # Install Django dependencies
-
+      - wait-for-postgres
+      - install-python-dependencies
       - run:
           name: Run Django Tests
           command: python manage.py test
-
       - run:
           name: Check Node.js and npm Versions
           command: |
@@ -98,13 +79,11 @@ jobs:
             node -v
             echo "Checking npm version..."
             npm -v
-
       - run:
           name: Install Node.js Dependencies
           command: |
             cd portfolioOptimizer
-            npm install 
-
+            npm install
       - run:
           name: Run Frontend Tests
           command: |
