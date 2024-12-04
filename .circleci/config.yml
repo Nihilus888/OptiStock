@@ -49,9 +49,10 @@ jobs:
             - ~/.cache/pip
           key: v1-pip-cache-{{ checksum "requirements.txt" }}
       - wait-for-postgres
-      - run:
-          name: Migrate Database
-          command: python manage.py migrate
+      # Removed the database migration step
+      # - run:
+      #     name: Migrate Database
+      #     command: python manage.py migrate
 
   test:
     docker:
