@@ -130,21 +130,52 @@ export const optimizePortfolio = async (assets, returns, maxWeights) => {
 };
 
 // Function to call trading bot
-export const tradingBot = async (symbol, startDate, endDate) => {
-  const bodyData = {
-    "symbol": symbol,
-    "startDate": startDate,
-    "endDate": endDate
+export const tradingBot = async (
+  symbol = "SPY",
+  startDate = "2024-11-01",
+  endDate = "2024-11-30",
+  cash_at_risk = 0.5
+) => {
+  // Ensure valid defaults if empty strings are passed
+  symbol = symbol || "SPY";
+  startDate = startDate || "2024-11-01";
+  endDate = endDate || "2024-11-30";
+
+  const bodyData = { symbol, startDate, endDate, cash_at_risk };
+
+  console.log('bodyData', bodyData); // Debug the payload
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/run_strategy/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(bodyData),
+    });
+  
+    const responseText = await response.text();
+    console.log('Raw Response Text:', responseText);
+  
+    // Only try to parse JSON if responseText looks valid
+    const jsonResponse = responseText ? JSON.parse(responseText) : {};
+    return jsonResponse;
+  } catch (error) {
+    console.error('Error parsing response: ', error);
   }
+};
 
-  const response = await fetch(`${API_BASE_URL}/run_strategy/`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(bodyData),
-  })
+// Example usage
+const run = async () => {
+  try {
+    console.log('Starting trading bot...');
+    const result = await tradingBot('SPY', '2023-11-30', '2023-12-31');
+    if (result && result.status === 'success') {
+      console.log('Backtest started successfully.');
+    } else {
+      console.log('Failed to start the backtest or trading bot.');
+    }
+  } catch (err) {
+    console.error('Error during bot execution:', err);
+  }
+};
 
-  console.log(response);
-  return response.json();
-}
+run();

@@ -5,20 +5,20 @@ export default function TradingBot() {
     const [ticker, setTicker] = useState('');
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
+    const cash_at_risk = 0.5;
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        // Ensure all fields are filled
         if (!ticker || !startDate || !endDate) {
-            alert("Please fill in all fields before submitting.");
-            return;
+            alert("It will default to symbol SPY, start date at 2024-11-01 and end date at 2024-11-30");
         }
-
+    
         try {
-            const response = await tradingBot(ticker, startDate, endDate);
-            const result = await response.json();
-            // Handle the result (e.g., display a message or update state)
-            console.log(result);
+            const response = await tradingBot(ticker, startDate, endDate, cash_at_risk);
+            console.log('response', response);
+    
+            // Remove `response.json()` because the response is already parsed
+            console.log('result', response);
         } catch (err) {
             console.error("Error occurred while submitting the data", err);
         }
