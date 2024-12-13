@@ -32,3 +32,55 @@ The vision for OptiStock is to become a go-to solution for investors looking for
 
 ## Things that I have picked up
 With the increasing rate of devops being required for full stack software engineers, I've decided to pick up and do more of automated testing via CI/CD pipelines using circle ci and writing out the test cases for both frontend and backend to ensure that my application behaves as it should be without any unforeseen issues arising that might break it. In addition, I had to learn Django from scratch but having knowledge in backend engineering and python, it was easier to pick it up after watching some youtube videos, reading the documentation and using chatgpt.
+
+## Images of the application
+
+1. Home page:
+  <img width="1436" alt="Screenshot 2024-12-13 at 6 01 16 PM" src="https://github.com/user-attachments/assets/dac24152-619d-4480-9294-17ce2cd9e76f" />
+
+2. Description of the application's usage:
+   <img width="1436" alt="Screenshot 2024-12-13 at 6 04 30 PM" src="https://github.com/user-attachments/assets/b997a233-49e2-447c-bf11-5dd7ccae69c1" />
+
+3. Financial News:
+  <img width="1434" alt="Screenshot 2024-12-13 at 6 04 52 PM" src="https://github.com/user-attachments/assets/c9989f19-e19d-4dc9-a367-3e563e736108" />
+
+4. Graph of performance against S&P 500:
+  <img width="1436" alt="Screenshot 2024-12-13 at 6 10 24 PM" src="https://github.com/user-attachments/assets/f491e971-07b7-4d37-ae07-887ea13ed0da" />
+
+5. Dashboard with financial rations against S&P 500:
+  <img width="1434" alt="Screenshot 2024-12-13 at 6 10 38 PM" src="https://github.com/user-attachments/assets/65fdacc4-f14a-476c-9ed4-90709a91bc17" />
+
+## How to use
+
+As server fees are high with AWS, Heroku, Vercel or Azure, it is not really an option to deploy on these servers unless really necessary and people are using it. If you would like to use this, you can git clone the repository and run these commands for the frontend:
+
+```
+npm start
+```
+
+and for the backend:
+
+```
+python manage.py runserver
+```
+
+Furthermore, please install the different packages using 
+
+```
+npm install
+```
+
+and
+
+```
+install -r requirements.txt
+```
+
+This should allow you to access all the necessary functions of the application.
+
+
+   
+
+
+
+
