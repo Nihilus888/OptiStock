@@ -50,6 +50,7 @@ const NavBar = () => {
               <Link to="/company-analysis" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">Balance Sheet</Link>
               <Link to="/income-statement" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">Income Statement</Link>
               <Link to="/trading-bot" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">Trading Bot</Link>
+              <Link to="/Checkout" className="text-white px-4 hover:text-blue-400 transition-colors duration-300">Check out</Link>
               <button onClick={handleLogout} className="text-white px-4 hover:text-blue-400 transition-colors duration-300">Logout</button>
             </>
           ) : (
