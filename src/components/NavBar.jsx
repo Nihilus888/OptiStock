@@ -8,10 +8,6 @@ const NavBar = () => {
   const [logoutTimeout, setLogoutTimeout] = useState(null); // State to manage logout timeout
 
   const handleLogout = () => {
-    // Show a toast notification before logging out
-    toast.success('Login successful! Redirecting...', {
-      autoClose: 2000,
-    });
 
     // Clear any existing timeout
     if (logoutTimeout) {
@@ -21,8 +17,15 @@ const NavBar = () => {
     // Set a timeout to log out the user
     const timeout = setTimeout(() => {
       localStorage.removeItem('token'); // Remove the token from local storage
+      localStorage.removeItem('user'); // Remove the user from local storage
+      localStorage.removeItem('username'); // Remove the username from local storage
       logout(); // Call the logout function to update context state
     }, 2000); // Set the delay to 2 seconds
+
+    // Show a toast notification before logging out
+    toast.success('Login successful! Redirecting...', {
+      autoClose: 2000,
+    });
 
     setLogoutTimeout(timeout); // Store the timeout ID in state
   };

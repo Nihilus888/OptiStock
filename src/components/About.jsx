@@ -21,9 +21,9 @@ export default function About() {
             By utilizing advanced algorithms and financial models, we offer personalized insights that aim to maximize returns while minimizing risks.
           </p>
           <img
-            src="https://source.unsplash.com/1600x900/?finance,stocks"
+            src="/Nasdaq.jpg"
             alt="Stock Market"
-            className="rounded-lg shadow-lg w-full h-64 object-cover mb-6"
+            className="shadow-lg w-full object-cover mb-6"
           />
         </section>
 

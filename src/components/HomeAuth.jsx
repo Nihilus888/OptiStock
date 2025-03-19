@@ -1,11 +1,11 @@
 import React from 'react';
 import { ReactTyped as Typed } from 'react-typed';
-import { useAuth } from './AuthContext';
 import { useNavigate } from 'react-router-dom'; 
 
 export default function HomeAuth() {
-  const { user } = useAuth();
   const navigate = useNavigate(); 
+
+  const username = localStorage.getItem("username") || 'Guest';
 
   // Define the handlePortfolioAnalysis function inside the component
   const handlePortfolioAnalysis = () => {
@@ -26,7 +26,7 @@ export default function HomeAuth() {
       >
         <div className="bg-black bg-opacity-60 p-6 rounded-lg text-center">
           <Typed
-            strings={[`Welcome${user ? `, ${user.username}` : ''} to OptiStock`]} // Greet the user by username if authenticated
+            strings={[`Welcome ${username} to OptiStock`]}  // Greet the user by username if authenticated
             typeSpeed={50}
             backSpeed={30}
             loop={false}
