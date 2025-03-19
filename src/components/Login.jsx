@@ -30,19 +30,24 @@ export default function LoginForm() {
         },
         body: JSON.stringify(formData),
       });
-
+  
       if (response.ok) {
         const data = await response.json();
         console.log('User logged in:', data);
-        // Save the JWT token in local storage or context
+  
+        // Assuming you have username in the formData:
+        const username = formData.username;
+  
+        // Save the JWT token and username in local storage
         localStorage.setItem('token', data.access); // Save access token
+        localStorage.setItem('username', username); // Save username manually from formData
         login(data); // Use the login function to set the user state in the context
-        
+  
         // Show a success notification
         toast.success('Login successful! Redirecting...', {
           autoClose: 2000, // Close after 2 seconds
         });
-
+  
         // Redirect after a timeout
         setTimeout(() => {
           navigate('/dashboard'); // Redirect to the dashboard after successful login

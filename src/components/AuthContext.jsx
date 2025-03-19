@@ -5,13 +5,18 @@ const AuthContext = createContext();
 
 // Create AuthProvider component
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // Change null to initial user state if needed
+  const [user, setUser] = useState(() => {
+    const storedUser = localStorage.getItem('user');
+    return storedUser ? JSON.parse(storedUser) : null;
+  });
+  
   const [token, setToken] = useState(localStorage.getItem('token')); // Store token in state
 
   const login = (userData) => {
     setUser(userData); // Set the user state when logging in
     setToken(userData.access); // Store the access token
     localStorage.setItem('token', userData.access); // Store the token in local storage
+    localStorage.setItem('user', JSON.stringify(userData)); // Store the user in local storage
   };
 
   const logout = () => {
