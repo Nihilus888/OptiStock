@@ -40,7 +40,7 @@ const PortfolioAnalysis = () => {
     <div className="justify-center items-center bg-black min-h-screen">
       <div className="p-4 max-w-lg mx-auto bg-black rounded-lg shadow-md">
         <h2 className="text-2xl font-semibold mb-4 text-white text-center">Portfolio Analysis</h2>
-        <div className="flex space-x-2 mb-4">
+        <div className="flex space-x-4 mb-4">
           <button
             onClick={() => setActiveTab('absorption')}
             className={`px-4 py-2 rounded ${activeTab === 'absorption' ? 'bg-blue-500' : 'bg-gray-600'} text-white`}

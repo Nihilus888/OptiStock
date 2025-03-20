@@ -147,7 +147,7 @@ const Stats = () => {
       )}
 
       {/* Show error if any */}
-      {error && <p className="text-red-500 text-center">{error}</p>}
+      {error && <p className="text-red-500 text-center font-extrabold">{error}</p>}
 
       {/* Display the stock stats */}
       {stockData && (

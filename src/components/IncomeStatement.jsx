@@ -2,56 +2,41 @@ import React, { useState, useEffect } from 'react';
 
 export default function IncomeStatement() {
     const [ticker, setTicker] = useState('');
+    const [submittedTicker, setSubmittedTicker] = useState("MSFT");
     const [company, setCompany] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const fetchGeneralIncomeSheet = async () => {
-        setLoading(true)
-        setError(null);
-        try {
-            const response = await fetch(
-                `https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol=MSFT&apikey=${process.env.REACT_APP_ALPHAVANTAGE_API_TOKEN}`
-            );
-            const result = await response.json();
-            setCompany(result.annualReports || []);
-        } catch (err) {
-            setError("Error fetching Microsoft's balance sheet");
-            console.error('Error fetching data from API', err)
-        }
-        setLoading(false);
-    }
-
-    const fetchIncomeSheet = async () => {
+    const fetchIncomeSheet = async (symbol) => {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch (
-                `https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol=${ticker}&apikey=${process.env.REACT_APP_ALPHAVANTAGE_API_TOKEN}`
-            )
+            const response = await fetch(
+                `https://www.alphavantage.co/query?function=INCOME_STATEMENT&symbol=${symbol}&apikey=${process.env.REACT_APP_ALPHAVANTAGE_API_TOKEN}`
+            );
             const result = await response.json();
-            if (result) {
+            if (result.annualReports) {
                 setCompany(result.annualReports);
             } else {
-                fetchGeneralIncomeSheet();
+                setError("API call limit reached. Please try again later.");
             }
         } catch (err) {
-            setError(`Error fetching ${ticker}'s balance sheet`)
-            console.error("Error fetching data from API", err)
+            setError(`Error fetching income statement because of rate limit issues.`);
+            console.error("Error fetching data from API", err);
         }
-    }
+        setLoading(false);
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         if (ticker.trim()) {
-            fetchIncomeSheet();
-        } else {
-            fetchGeneralIncomeSheet();
+            setSubmittedTicker(ticker);  // Update submitted ticker
+            fetchIncomeSheet(ticker);
         }
-    }
+    };
 
     useEffect(() => {
-        fetchGeneralIncomeSheet();
+        fetchIncomeSheet();
     }, []);
 
     return (
@@ -68,20 +53,23 @@ export default function IncomeStatement() {
                 />
                 <button
                     type="submit"
-                    className="bg-blue-600 hover:bg-blue-700 p-3 rounded-r-md transitional-all"
+                    className="bg-blue-600 hover:bg-blue-700 p-3 rounded-r-md transition-all"
                 >
                     Search
                 </button>
             </form>
 
-            {/* Show loading state */}
             {loading && (
                 <div className="flex justify-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-blue-500"></div>
                 </div>
             )}
-            {/* Show error if any */}
+            
             {error && <p className="text-red-500 text-center font-extrabold">{error}</p>}
+
+            <div className="text-center mb-10 text-2xl font-extrabold">
+                {"Ticker Name: "} {submittedTicker}
+            </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {company.length > 0 ? (
@@ -102,10 +90,9 @@ export default function IncomeStatement() {
                     ))
                 ) : (
                     <p className="text-center text-gray-500">
-                        No income sheet data found. Displaying Microsoft's income sheet
                     </p>
                 )}
             </div>
         </div>
-    )
+    );
 }

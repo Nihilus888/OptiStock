@@ -35,7 +35,7 @@ export default function HomeAuth() {
           />
           <h2 className="text-2xl font-light mb-6">
             <Typed
-              strings={['Your one-stop solution for portfolio optimization']}
+              strings={['Your one-stop solution for anything related to the financial markets']}
               typeSpeed={100}
               backSpeed={100}
               loop={false}

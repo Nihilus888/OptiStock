@@ -12,11 +12,15 @@ function Price() {
         try {
             const response = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${ticker}&apikey=${process.env.ALPHAVANTAGE_API_TOKEN}`);
             const result = await response.json();
-            const timeSeries = result['Time Series (Daily)'];
-            setPrices(timeSeries);
-            setError(null);
+            if(result['Time Series (Daily)']) {
+                const timeSeries = result['Time Series (Daily)'];
+                setPrices(timeSeries);
+                setError(null);
+            } else {
+                setError("API call limit reached. Please try again later.");
+            }
         } catch (err) {
-            setError('Error when trying to query prices');
+            setError("API call limit reached. Please try again later.");
         }
     };
 
@@ -123,8 +127,9 @@ function Price() {
                 </button>
             </form>
 
+            {error && <p className="text-red-500 text-center font-extrabold">{error}</p>}
+
             <div className="mt-8 px-4">
-                {error && <p className="text-red-500">{error}</p>}
                 {chartData && (
                     <div>
                         <Line 

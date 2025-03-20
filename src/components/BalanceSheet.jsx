@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 export default function BalanceSheet() {
     const [ticker, setTicker] = useState('');
+    const [submittedTicker, setSubmittedTicker] = useState('MSFT'); // Stores the submitted ticker
     const [company, setCompany] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -14,20 +15,24 @@ export default function BalanceSheet() {
                 `https://www.alphavantage.co/query?function=BALANCE_SHEET&symbol=MSFT&apikey=${process.env.REACT_APP_ALPHAVANTAGE_API_TOKEN}`
             );
             const result = await response.json();
-            setCompany(result.annualReports || []);
+            if (result.annualReports) {
+                setCompany(result.annualReports || []);
+            } else {
+                setError("API call limit reached. Please try again later.");
+            }
         } catch (err) {
-            setError("Error fetching Microsoft's balance sheet.");
+            setError("Error fetching balance sheet.");
             console.error("Error fetching company balance sheets", err);
         }
         setLoading(false);
     };
 
-    const fetchCompanyBalanceSheet = async () => {
+    const fetchCompanyBalanceSheet = async (symbol) => {
         setLoading(true);
         setError(null);
         try {
             const response = await fetch(
-                `https://www.alphavantage.co/query?function=BALANCE_SHEET&symbol=${ticker}&apikey=${process.env.REACT_APP_ALPHAVANTAGE_API_TOKEN}`
+                `https://www.alphavantage.co/query?function=BALANCE_SHEET&symbol=${symbol}&apikey=${process.env.REACT_APP_ALPHAVANTAGE_API_TOKEN}`
             );
             const result = await response.json();
             if (result.annualReports) {
@@ -36,8 +41,8 @@ export default function BalanceSheet() {
                 fetchGeneralCompany();
             }
         } catch (err) {
-            setError(`Error fetching ${ticker}'s balance sheet`);
-            console.error(`Error fetching ${ticker}'s balance sheet`, err);
+            setError(`Error fetching ${symbol}'s balance sheet`);
+            console.error(`Error fetching ${symbol}'s balance sheet`, err);
         }
         setLoading(false);
     };
@@ -45,8 +50,10 @@ export default function BalanceSheet() {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (ticker.trim()) {
-            fetchCompanyBalanceSheet();
+            setSubmittedTicker(ticker);  // Update the displayed ticker only on submit
+            fetchCompanyBalanceSheet(ticker);
         } else {
+            setSubmittedTicker("MSFT");  // Default to MSFT when no ticker is entered
             fetchGeneralCompany();
         }
     };
@@ -83,9 +90,13 @@ export default function BalanceSheet() {
             )}
 
             {/* Show error if any */}
-            {error && <p className="text-red-500 text-center">{error}</p>}
+            {error && <p className="text-red-500 text-center font-extrabold">{error}</p>}
 
-            {/* Display the company balance sheet data */}
+            {/* Display the last submitted ticker (not while typing) */}
+            <div className="text-center mb-10 text-2xl font-extrabold">
+                {"Ticker Name: "} {submittedTicker}
+            </div>
+
             {/* Display the company balance sheet data */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {company.length > 0 ? (
@@ -105,8 +116,7 @@ export default function BalanceSheet() {
                         </div>
                     ))
                 ) : (
-                    <p className="text-center text-gray-400">
-                        No balance sheet data found. Displaying Microsoft's Balance Sheet.
+                    <p className="text-center text-gray-400 flex justify-center items-center">
                     </p>
                 )}
             </div>

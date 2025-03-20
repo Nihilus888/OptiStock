@@ -3,7 +3,7 @@ import { ReactTyped as Typed } from 'react-typed';
 
 const handleGetStarted = () => {
   setTimeout(() => {
-    window.location.href = '/create-account'; // Replace with your actual route
+    window.location.href = '/login'; // Replace with your actual route
   }, 1000);
 }
 

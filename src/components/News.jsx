@@ -12,7 +12,11 @@ const TickerNews = () => {
     try {
       const response = await fetch(`https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers=AAPL&apikey=${process.env.ALPHAVANTAGE_API_TOKEN}`);
       const result = await response.json();
-      setArticles(result.feed); // Update with general news data
+      if(result.feed) {
+        setArticles(result.feed || []);
+      } else {
+        setError("API call limit reached. Please try again later.");
+      }
     } catch (err) {
       setError("Failed to fetch general news. Please try again.");
       console.error("Error fetching the general news:", err);
@@ -27,8 +31,8 @@ const TickerNews = () => {
     try {
       const response = await fetch(`https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers=${ticker}&apikey=8PGDFL6JGOQEL6AI`);
       const result = await response.json();
-      if (result) {
-        setArticles(result); // Update articles with API response data
+      if (result && result.feed) {
+        setArticles(result.feed || []); // Ensure articles is always an array
       } else {
         fetchGeneralNews(); // Fallback to general news if no articles found for the ticker
       }
@@ -83,11 +87,11 @@ const TickerNews = () => {
       )}
 
       {/* Show error if any */}
-      {error && <p className="text-red-500 text-center">{error}</p>}
+      {error && <p className="text-red-500 text-center font-extrabold">{error}</p>}
 
       {/* Display the articles */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {articles.length > 0 ? (
+        {Array.isArray(articles) && articles.length > 0 ? (
           articles.map((article, index) => (
             <div
               key={index}
