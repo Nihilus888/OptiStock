@@ -10,7 +10,11 @@ class UserViewsTests(TestCase):
         self.user_data = {
             'username': 'testuser',
             'password': 'testpassword',
-            'email': 'test@example.com'
+            'email': 'test@example.com',
+            'first_name': 'Test',  # Added first_name field
+            'last_name': 'User',   # Added last_name field
+            'age': 25,             # Added age field
+            'experience': 5,       # Added experience field
         }
 
     def test_register_user(self):
@@ -22,6 +26,7 @@ class UserViewsTests(TestCase):
         self.assertTrue(User.objects.filter(username=self.user_data['username']).exists())
 
     def test_register_user_missing_fields(self):
+        # Missing email, password, first_name, last_name, age, experience
         response = self.client.post('/accountsUser/register/', data=json.dumps({'username': 'testuser'}), content_type='application/json')
         self.assertEqual(response.status_code, 400)
         self.assertEqual(response.json(), {'message': 'Missing required fields.'})
