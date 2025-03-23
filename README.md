@@ -49,6 +49,7 @@ With the increasing rate of devops being required for full stack software engine
 5. Dashboard with financial rations against S&P 500:
   <img width="1434" alt="Screenshot 2024-12-13 at 6 10 38 PM" src="https://github.com/user-attachments/assets/65fdacc4-f14a-476c-9ed4-90709a91bc17" />
 
+
 ## How to use
 
 As server fees are high with AWS, Heroku, Vercel or Azure, it is not really an option to deploy on these servers unless really necessary and people are using it. If you would like to use this, you can git clone the repository and run these commands for the frontend:
@@ -77,9 +78,21 @@ install -r requirements.txt
 
 This should allow you to access all the necessary functions of the application.
 
+## System Design considerations
 
-   
+As many applications start to get more and more users, we have to consider the impact of how scalable and resilient our applications are towards this ongoing increasing demand and traffic.
 
+There are certain improvements that I would have made in the future in 
+the future including having a cache using Redis to store certain data 
+so we can prevent requests from hitting the database unnecessarily.
 
+There are various data that we can store in a cache and also prevent 
+the data from being stale. As balance sheet and income statements only 
+updates once after a few months due to companies only release earnings 
+4 times a year, we could call on the cached data instead of calling 
+the APIs or database directly that might lead to rate limiting issues.
 
+During that period, we could wait for webhooks to update our cache 
+data when there is an update of balance and income sheets. This is one of the most optimal ways to update data and store data without hitting rate limiting issues or cause our database to have too many request.
 
+Second, we can add a load balancer and potentially use a round robin method to balance out the load evenly among the various servers. This would help to alleviate DDOS attacks and also ensure that the servers are utilized evenly without one server taking too many requests or load. 
