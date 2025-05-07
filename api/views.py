@@ -11,12 +11,13 @@ from lumibot.backtesting import YahooDataBacktesting
 from lumibot.strategies.strategy import Strategy
 from lumibot.traders import Trader
 from datetime import datetime 
-from alpaca_trade_api import REST 
 from timedelta import Timedelta 
-from alpaca_trade_api.rest import REST, TimeFrame
 from tradingbot.tasks import run_trading_bot
 import os
 import re
+import logging
+
+logger = logging.getLogger(__name__)  
 
 @api_view(['POST'])
 def analyze_absorption_ratio_view(request):
@@ -34,7 +35,7 @@ def analyze_absorption_ratio_view(request):
         else:
             return JsonResponse({'error': 'Failed to analyze absorption ratio'}, status=500)
     except Exception as e:
-        print(f"Error in analyze_absorption_ratio_view: {e}")
+        logger.error(f"Error in analyze_absorption_ratio_view: {e}")
         return JsonResponse({'error': 'An error occurred while analyzing the absorption ratio'}, status=500)
 
 
@@ -55,7 +56,7 @@ def diversification_ratio_view(request):
         else:
             return JsonResponse({'error': 'Failed to analyze diversification ratio'}, status=500)
     except Exception as e:
-        print(f"Error in diversification_ratio_view: {e}")
+        logger.error(f"Error in diversification_ratio_view: {e}")
         return JsonResponse({'error': 'An error occurred while analyzing the diversification ratio'}, status=500)
 
 
@@ -74,7 +75,7 @@ def drawdown_ratio_view(request):
         else:
             return JsonResponse({'error': 'Failed to analyze drawdown ratio'}, status=500)
     except Exception as e:
-        print(f"Error in drawdown_ratio_view: {e}")
+        logger.error(f"Error in drawdown_ratio_view: {e}")
         return JsonResponse({'error': 'An error occurred while analyzing the drawdown ratio'}, status=500)
 
 
@@ -97,7 +98,7 @@ def sharpe_ratio_view(request):
         else:
             return JsonResponse({'error': 'Failed to analyze Sharpe ratio'}, status=500)
     except Exception as e:
-        print(f"Error in sharpe_ratio_view: {e}")
+        logger.error(f"Error in sharpe_ratio_view: {e}")
         return JsonResponse({'error': 'An error occurred while analyzing the Sharpe ratio'}, status=500)
 
 
@@ -109,8 +110,6 @@ def investable_portfolio_view(request):
     asset_weights = data.get('assetWeights')
     portfolio_value = data.get('portfolioValue')
 
-    print(data)
-
     if assets is None or asset_prices is None or asset_weights is None or portfolio_value is None:
         return JsonResponse({'error': 'Missing required fields'}, status=400)
 
@@ -121,7 +120,7 @@ def investable_portfolio_view(request):
         else:
             return JsonResponse({'error': 'Failed to construct investable portfolio'}, status=500)
     except Exception as e:
-        print(f"Error in investable_portfolio_view: {e}")
+        logger.error(f"Error in investable_portfolio_view: {e}")
         return JsonResponse({'error': 'An error occurred while constructing the investable portfolio'}, status=500)
 
 
@@ -142,7 +141,7 @@ def optimize_portfolio_view(request):
         else:
             return JsonResponse({'error': 'Failed to optimize portfolio'}, status=500)
     except Exception as e:
-        print(f"Error in optimize_portfolio_view: {e}")
+        logger.error(f"Error in optimize_portfolio_view: {e}")
         return JsonResponse({'error': 'An error occurred while optimizing the portfolio'}, status=500)
 
 @api_view(['POST'])
