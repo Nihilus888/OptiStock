@@ -11,7 +11,9 @@ from lumibot.backtesting import YahooDataBacktesting
 from lumibot.strategies.strategy import Strategy
 from lumibot.traders import Trader
 from datetime import datetime 
+from alpaca_trade_api import REST 
 from timedelta import Timedelta 
+from alpaca_trade_api.rest import REST, TimeFrame
 from tradingbot.tasks import run_trading_bot
 import os
 import re
