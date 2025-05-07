@@ -11,7 +11,7 @@ commands:
     steps:
       - run:
           name: Install Python Dependencies
-          command: pip install --default-timeout=100 --use-deprecated=legacy-resolver -r requirements.txt
+          command: pip install --default-timeout=100 -r requirements.txt
 
   wait-for-postgres:
     steps:
