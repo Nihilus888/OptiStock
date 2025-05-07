@@ -1,8 +1,8 @@
-from django.test import SimpleTestCase
+from django.test import TestCase
 from unittest.mock import patch
 from api.client import Client  # Adjust this based on where your Client class is located
 
-class ClientTestCase(SimpleTestCase):
+class ClientTestCase(TestCase):
 
     @patch('api.client.Client.post_request') 
     def test_analyze_absorption_ratio_success(self, mock_post_request):
@@ -14,7 +14,7 @@ class ClientTestCase(SimpleTestCase):
         covariance_matrix = [[0.1, 0.2], [0.2, 0.3]]
         result = Client.analyze_absorption_ratio(assets, covariance_matrix)
 
-        self.assertEqual(result, 0.85)
+        self.assertEqual(result, 0.85, "Expected absorption ratio to be 0.85")
 
     @patch('api.client.Client.post_request') 
     def test_diversification_ratio(self, mock_post_request):
@@ -39,7 +39,7 @@ class ClientTestCase(SimpleTestCase):
 
         result = Client.diversification_ratio(assets, asset_covariance_matrix, portfolios)
 
-        self.assertEqual(result, [1.2909944487358058])
+        self.assertEqual(result, [1.2909944487358058], "diversification ratio is not correct")
 
     @patch('api.client.Client.post_request') 
     def test_drawdown_ratio(self, mock_post_request):
@@ -105,7 +105,7 @@ class ClientTestCase(SimpleTestCase):
             ]
         }
 
-        self.assertEqual(result, expected_result)
+        self.assertEqual(result, expected_result, "drawdown ratio is not correct")
 
     @patch('api.client.Client.post_request') 
     def test_sharpe_ratio(self, mock_post_request):
@@ -134,7 +134,7 @@ class ClientTestCase(SimpleTestCase):
 
         result = Client.sharpe_ratio(assets, asset_returns, assets_covariance_matrix, risk_free_rate, portfolio)
 
-        self.assertEqual(result, [0.19999999999999998, 0.5])
+        self.assertEqual(result, [0.19999999999999998, 0.5], "sharpe ratio is not correct")
 
     @patch('api.client.Client.post_request')    
     def test_optimize_portfolio(self, mock_post_request):   
@@ -160,4 +160,4 @@ class ClientTestCase(SimpleTestCase):
 
         result = Client.optimize_portfolio(assets, asset_returns, max_asset_weights)
         
-        self.assertEqual(result, [0.3999999780097259, 0.6000000219902976])
+        self.assertEqual(result, [0.3999999780097259, 0.6000000219902976], "optimize portfolio is not correct")
