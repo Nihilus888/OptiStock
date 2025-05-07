@@ -1,8 +1,8 @@
-from django.test import TestCase
+from django.test import SimpleTestCase
 from unittest.mock import patch
 from api.client import Client  # Adjust this based on where your Client class is located
 
-class ClientTestCase(TestCase):
+class ClientTestCase(SimpleTestCase):
 
     @patch('api.client.Client.post_request') 
     def test_analyze_absorption_ratio_success(self, mock_post_request):
