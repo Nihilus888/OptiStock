@@ -17,6 +17,8 @@ Risk Management Tools: Features advanced risk assessment tools that help balance
 ### Frontend: React.js
 OptiStock's frontend is built using React.js, chosen for its modular architecture and the availability of libraries that make development faster and more scalable. React’s component-based design enables the seamless integration of features like real-time analytics and dynamic data rendering, which are essential for the project.
 
+Added lazy loading and fallback to the news article as it has a lot of heavy text content which might take some time to load for better user experience.
+
 ### Backend: Django (Python)
 Django was selected for the backend due to its powerful integration with data science and machine learning libraries within the Python ecosystem. The ability to work with tools like NumPy, Pandas, and scikit-learn allows for more advanced financial modeling and analysis, compared to other backend frameworks such as Laravel or Spring Boot. Django also provides a robust structure for handling API integrations, which is crucial for connecting with the portfolio optimizer API. Furthermore, it was a backend framework that I would like to pick up as it's versatility is increasing in the software engineering market place. To ensure that I'm following modern authentication industry standards, I decided to go with JWT which I chose over the session authentication method.
 
@@ -95,4 +97,8 @@ the APIs or database directly that might lead to rate limiting issues.
 During that period, we could wait for webhooks to update our cache 
 data when there is an update of balance and income sheets. This is one of the most optimal ways to update data and store data without hitting rate limiting issues or cause our database to have too many request.
 
-Second, we can add a load balancer and potentially use a round robin method to balance out the load evenly among the various servers. This would help to alleviate DDOS attacks and also ensure that the servers are utilized evenly without one server taking too many requests or load. 
+Second, we can add a load balancer and potentially use a round robin 
+method to balance out the load evenly among the various servers. This 
+would help to alleviate DDOS attacks and also ensure that the servers 
+are utilized evenly without one server taking too many requests or 
+load. 
