@@ -23,6 +23,7 @@ export const AuthProvider = ({ children }) => {
     setUser(null); // Clear the user state when logging out
     setToken(null); // Clear the token from state
     localStorage.removeItem('token'); // Remove the token from local storage
+    localStorage.removeItem('user'); // Remove the user from local storage
   };
 
   return (
