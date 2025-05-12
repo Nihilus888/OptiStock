@@ -23,7 +23,8 @@ export default function LoginForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:8000/accountsUser/login/', {
+      const url = 'http://localhost:8000/accountsUser/login/';
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

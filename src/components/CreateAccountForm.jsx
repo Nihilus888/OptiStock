@@ -19,7 +19,8 @@ export default function CreateAccountForm() {
     console.log(formData);  // Log form data for debugging
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/accountsUser/register/', {
+      const url = 'http://127.0.0.1:8000/accountsUser/register/'
+      const response = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
