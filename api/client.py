@@ -9,6 +9,7 @@ class Client:
     A client for interacting with the Portfolio Optimizer API.
     """
     BASE_URL = "https://api.portfoliooptimizer.io/v1"
+    TIMEOUT = 5
 
     @classmethod
     def analyze_absorption_ratio(cls, assets: int, covariance_matrix: list[list[float]]) -> Optional[float]:
@@ -114,7 +115,7 @@ class Client:
             "portfolios": portfolios,
         }
 
-        json_response = cls.post_request(url, payload)  # Use the helper function
+        json_response = cls.post_request(url, payload)  
 
         sharpe_ratios = [portfolio.get("portfolioSharpeRatio") for portfolio in json_response.get("portfolios", [])] if json_response else None
 
@@ -148,7 +149,7 @@ class Client:
             "portfolioValue": portfolio_value  # Correct field name
         }
 
-        json_response = cls.post_request(url, payload)
+        json_response = cls.post_request(url, payload, timeout=5)
 
         if json_response:
             # Return the required fields from the API response
@@ -200,7 +201,7 @@ class Client:
             dict or None: The JSON response from the server, or None if an error occurred.
         """
         try:
-            response = requests.post(url, json=payload)
+            response = requests.post(url, json=payload, timeout=cls.TIMEOUT)
             response.raise_for_status()  # Raise an error for bad responses (4xx and 5xx)
             return response.json()  # Return parsed JSON data
         except requests.exceptions.RequestException as e:
