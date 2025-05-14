@@ -30,9 +30,8 @@ export default function BalanceSheet() {
         setLoading(true);
         setError(null);
         try {
-            const response = await fetch(
-                `https://www.alphavantage.co/query?function=BALANCE_SHEET&symbol=${symbol}&apikey=${process.env.REACT_APP_ALPHAVANTAGE_API_TOKEN}`
-            );
+            const url = `https://www.alphavantage.co/query?function=BALANCE_SHEET&symbol=${symbol}&apikey=${process.env.REACT_APP_ALPHAVANTAGE_API_TOKEN}`
+            const response = await fetch(url);
             const result = await response.json();
             if (result.annualReports) {
                 setCompany(result.annualReports);

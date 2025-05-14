@@ -17,6 +17,7 @@ import IncomeStatement from './components/IncomeStatement'; // Income statement 
 import TradingBot from './components/TradingBot'; // Trading bot page for authenticated users
 import Loading from './components/Loading'; // Loading spinner for lazy-loaded components
 import ErrorBoundary from './components/ErrorBoundary'; // Error boundary to catch and display errors in the app
+import Error from './components/Error'; // Error page to display when there is an Error
 
 // Lazy load the News component to improve performance
 const LazyNews = React.lazy(() => import('./components/News'));
@@ -34,7 +35,7 @@ function App() {
         <NavBar /> {/* Navigation bar displayed on all pages */}
         
         {/* Wrap the Routes inside an ErrorBoundary to catch any errors in the child components */}
-        <ErrorBoundary>
+        <ErrorBoundary fallback={<Error/>}>
           <Routes>
             {/* Routes for different pages */}
             <Route path="/home" element={<HomeAuth />} /> {/* Home page for authenticated users */}

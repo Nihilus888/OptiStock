@@ -17,10 +17,14 @@ Risk Management Tools: Features advanced risk assessment tools that help balance
 ### Frontend: React.js
 OptiStock's frontend is built using React.js, chosen for its modular architecture and the availability of libraries that make development faster and more scalable. React’s component-based design enables the seamless integration of features like real-time analytics and dynamic data rendering, which are essential for the project.
 
-Added lazy loading and fallback to the news article as it has a lot of heavy text content which might take some time to load for better user experience.
+Added lazy loading and fallback to the news article as it has a lot of heavy text content which might take some time to load for better user experience. In addition, I used an Error Boundary to catch any errors with a fallback UI to display the error to let users know what is going on instead of just a blank white screen which is not good for UI/UX.
+
+To add more flair and nice animations, I have used chart.js with react typed to have some nice charts and nice animations.
 
 ### Backend: Django (Python)
 Django was selected for the backend due to its powerful integration with data science and machine learning libraries within the Python ecosystem. The ability to work with tools like NumPy, Pandas, and scikit-learn allows for more advanced financial modeling and analysis, compared to other backend frameworks such as Laravel or Spring Boot. Django also provides a robust structure for handling API integrations, which is crucial for connecting with the portfolio optimizer API. Furthermore, it was a backend framework that I would like to pick up as it's versatility is increasing in the software engineering market place. To ensure that I'm following modern authentication industry standards, I decided to go with JWT which I chose over the session authentication method.
+
+For the trading bot to work, I needed to use Celery for task management queue in order for it to work when I press the use button as I get multithreaded issues when I don't use Celery for this purpose.
 
 ### API Integration
 OptiStock's API integration connects with stock market data providers and optimization algorithms to fetch up-to-date stock data and perform complex financial calculations in the background. This allows users to receive data-driven recommendations and insights on their portfolios without manual input.
