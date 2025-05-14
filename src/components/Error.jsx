@@ -1,11 +1,8 @@
-
 import React from 'react';
-import { AlertTriangle } from 'lucide-react'; 
 
 const Error = ({ error, resetErrorBoundary }) => {
   return (
     <div className="flex flex-col items-center justify-center h-screen text-center p-4">
-      <AlertTriangle className="w-16 h-16 text-red-500 mb-4" />
       <h1 className="text-2xl font-bold text-red-600">Something went wrong</h1>
       <p className="mt-2 text-gray-600">
         There was an error. Please try refreshing the page or contact support if the problem persists.
