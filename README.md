@@ -37,6 +37,8 @@ big issues in the long run. I had to setup and integrate it
 with my application which was quite fast and here are some 
 of the examples of issues that I was able to log.
 
+<img width="1434" alt="Screenshot 2025-05-15 at 4 51 26 PM" src="https://github.com/user-attachments/assets/4f76cae5-d398-46c2-9da5-7c3ab4dfcf6b" />
+
 ### Trading Bot
 OptiStock's trading bot uses machine learning via sentiment analysis that analyzes financial news to see if it is positive, neutral and negative and makes a purchase as well with confluences of volume and other measures to make buying or selling decisions. FinBert was used to analyse the financial news text and had three discrete decisions that it had which was positive, negative and neutral which will then allow it to make decisions based on probabilistic sentiments that then allows it to decide whether to buy or sell that equity.
 
