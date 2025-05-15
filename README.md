@@ -29,6 +29,14 @@ For the trading bot to work, I needed to use Celery for task management queue in
 ### API Integration
 OptiStock's API integration connects with stock market data providers and optimization algorithms to fetch up-to-date stock data and perform complex financial calculations in the background. This allows users to receive data-driven recommendations and insights on their portfolios without manual input.
 
+### Monitoring and Logging
+There might be some issues that I might not be hiding under 
+the hood of my application. I decided to use Sentry to help 
+me monitor, log and stack trace any errors that might be 
+big issues in the long run. I had to setup and integrate it 
+with my application which was quite fast and here are some 
+of the examples of issues that I was able to log.
+
 ### Trading Bot
 OptiStock's trading bot uses machine learning via sentiment analysis that analyzes financial news to see if it is positive, neutral and negative and makes a purchase as well with confluences of volume and other measures to make buying or selling decisions. FinBert was used to analyse the financial news text and had three discrete decisions that it had which was positive, negative and neutral which will then allow it to make decisions based on probabilistic sentiments that then allows it to decide whether to buy or sell that equity.
 
