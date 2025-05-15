@@ -30,12 +30,7 @@ For the trading bot to work, I needed to use Celery for task management queue in
 OptiStock's API integration connects with stock market data providers and optimization algorithms to fetch up-to-date stock data and perform complex financial calculations in the background. This allows users to receive data-driven recommendations and insights on their portfolios without manual input.
 
 ### Monitoring and Logging
-There might be some issues that I might not be hiding under 
-the hood of my application. I decided to use Sentry to help 
-me monitor, log and stack trace any errors that might be 
-big issues in the long run. I had to setup and integrate it 
-with my application which was quite fast and here are some 
-of the examples of issues that I was able to log.
+To catch hidden issues early and ensure long-term stability, I integrated Sentry into the application for real-time error monitoring, logging, and stack tracing. The setup process was quick and straightforward. Once integrated, Sentry immediately began capturing valuable insights into potential bugs and edge cases. Below are examples of issues it successfully logged.
 
 <img width="1434" alt="Screenshot 2025-05-15 at 4 51 26 PM" src="https://github.com/user-attachments/assets/4f76cae5-d398-46c2-9da5-7c3ab4dfcf6b" />
 
