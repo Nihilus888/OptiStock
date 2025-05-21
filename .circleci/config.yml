@@ -31,7 +31,7 @@ commands:
 jobs:
   build:
     docker:
-      - image: circleci/python:3.10-node  # Backend image
+      - image: circleci/python:3.12-node  # Backend image
       - image: circleci/postgres:latest
         environment:
           POSTGRES_DB: $DATABASE_NAME
@@ -56,7 +56,7 @@ jobs:
 
   test:
     docker:
-      - image: circleci/python:3.10-node  # Backend image
+      - image: circleci/python:3.12-node  # Backend image
       - image: circleci/postgres:latest
         environment:
           POSTGRES_DB: portfolio  # Database name
