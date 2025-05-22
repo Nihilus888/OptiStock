@@ -2,67 +2,52 @@ import React, { useState, useEffect } from 'react';
 
 export default function BalanceSheet() {
     const [ticker, setTicker] = useState('');
-    const [submittedTicker, setSubmittedTicker] = useState('MSFT'); // Stores the submitted ticker
-    const [company, setCompany] = useState([]);
+    const [submittedTicker, setSubmittedTicker] = useState('MSFT');
+    const [companyData, setCompanyData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const fetchGeneralCompany = async () => {
+    const fetchBalanceSheet = async (symbol = 'MSFT') => {
         setLoading(true);
         setError(null);
         try {
-            const url = `https://www.alphavantage.co/query?function=BALANCE_SHEET&symbol=MSFT&apikey=${process.env.REACT_APP_ALPHAVANTAGE_API_TOKEN}`
-            const response = await fetch(url);
-            const result = await response.json();
-            if (result.annualReports) {
-                setCompany(result.annualReports || []);
+            const response = await fetch(`http://127.0.0.1:8000/api/balance-sheet/${symbol}/`);
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error(`Server error: ${errorText}`);
+                throw new Error(`Failed to fetch data: ${response.status}`);
+            }
+            const json = await response.json();
+            const data = json.annualReports ?? json.data;
+            if (data?.length) {
+                setCompanyData(data);
             } else {
-                setError("API call limit reached. Please try again later.");
+                setError("No balance sheet data found.");
             }
         } catch (err) {
-            setError("Error fetching balance sheet.");
-            console.error("Error fetching company balance sheets", err);
+            console.error(`Error fetching balance sheet for ${symbol}:`, err);
+            setError(`Unable to fetch balance sheet for ${symbol}`);
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
-    };
-
-    const fetchCompanyBalanceSheet = async (symbol) => {
-        setLoading(true);
-        setError(null);
-        try {
-            const url = `https://www.alphavantage.co/query?function=BALANCE_SHEET&symbol=${symbol}&apikey=${process.env.REACT_APP_ALPHAVANTAGE_API_TOKEN}`
-            const response = await fetch(url);
-            const result = await response.json();
-            if (result.annualReports) {
-                setCompany(result.annualReports);
-            } else {
-                fetchGeneralCompany();
-            }
-        } catch (err) {
-            setError(`Error fetching ${symbol}'s balance sheet`);
-            console.error(`Error fetching ${symbol}'s balance sheet`, err);
-        }
-        setLoading(false);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (ticker.trim()) {
-            setSubmittedTicker(ticker);  // Update the displayed ticker only on submit
-            fetchCompanyBalanceSheet(ticker);
-        } else {
-            setSubmittedTicker("MSFT");  // Default to MSFT when no ticker is entered
-            fetchGeneralCompany();
-        }
+        const symbol = ticker.trim() || 'MSFT';
+        setSubmittedTicker(symbol);
+        fetchBalanceSheet(symbol);
     };
 
     useEffect(() => {
-        fetchGeneralCompany();
+        fetchBalanceSheet();
     }, []);
 
     return (
         <div className="max-w-10xl mx-auto p-6 bg-gray-900 text-white min-h-screen">
-            <h1 className="text-4xl font-extrabold mb-6 text-center">Search for Company Balance Sheet</h1>
+            <h1 className="text-4xl font-extrabold mb-6 text-center">
+                Search for Company Balance Sheet
+            </h1>
 
             <form onSubmit={handleSubmit} className="flex justify-center mb-8">
                 <input
@@ -80,44 +65,50 @@ export default function BalanceSheet() {
                 </button>
             </form>
 
-            {/* Show loading state */}
             {loading && (
                 <div className="flex justify-center">
                     <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-blue-500"></div>
                 </div>
             )}
 
-            {/* Show error if any */}
-            {error && <p className="text-red-500 text-center font-extrabold">{error}</p>}
+            {error && (
+                <p className="text-red-500 text-center font-extrabold">{error}</p>
+            )}
 
-            {/* Display the last submitted ticker (not while typing) */}
             <div className="text-center mb-10 text-2xl font-extrabold">
-                {"Ticker Name: "} {submittedTicker}
+                Ticker Name: {submittedTicker}
             </div>
 
-            {/* Display the company balance sheet data */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {company.length > 0 ? (
-                    company.map((report, index) => (
+                {companyData.length > 0 ? (
+                    companyData.map((report, index) => (
                         <div key={index} className="bg-gray-800 p-4 rounded-lg">
-                            <h2 className="text-xl font-bold mb-4">{`Fiscal Date Ending: ${report.fiscalDateEnding || 'N/A'}`}</h2>
-                            <p>Reported Currency: {report.reportedCurrency || 'N/A'}</p>
-                            <p>Total Assets: {report.totalAssets ? parseInt(report.totalAssets).toLocaleString() : 'N/A'}</p>
-                            <p>Total Liabilities: {report.totalLiabilities ? parseInt(report.totalLiabilities).toLocaleString() : 'N/A'}</p>
-                            <p>Total Shareholder Equity: {report.totalShareholderEquity ? parseInt(report.totalShareholderEquity).toLocaleString() : 'N/A'}</p>
-                            <p>Retained Earnings: {report.retainedEarnings ? parseInt(report.retainedEarnings).toLocaleString() : 'N/A'}</p>
-                            <p>Common Stock Shares Outstanding: {report.commonStockSharesOutstanding ? parseInt(report.commonStockSharesOutstanding).toLocaleString() : 'N/A'}</p>
-                            <p>Goodwill: {report.goodwill ? parseInt(report.goodwill).toLocaleString() : 'N/A'}</p>
-                            <p>Intangible Assets: {report.intangibleAssets ? parseInt(report.intangibleAssets).toLocaleString() : 'N/A'}</p>
-                            <p>Inventory: {report.inventory ? parseInt(report.inventory).toLocaleString() : 'N/A'}</p>
-                            <p>Cash and Cash Equivalents: {report.cashAndCashEquivalentsAtCarryingValue ? parseInt(report.cashAndCashEquivalentsAtCarryingValue).toLocaleString() : 'N/A'}</p>
+                            <h2 className="text-xl font-bold mb-4">
+                                Fiscal Date Ending: {report.fiscalDateEnding ?? 'N/A'}
+                            </h2>
+                            <p>Reported Currency: {report.reportedCurrency ?? 'N/A'}</p>
+                            <p>Total Assets: {formatNumber(report.totalAssets)}</p>
+                            <p>Total Liabilities: {formatNumber(report.totalLiabilities)}</p>
+                            <p>Total Shareholder Equity: {formatNumber(report.totalShareholderEquity)}</p>
+                            <p>Retained Earnings: {formatNumber(report.retainedEarnings)}</p>
+                            <p>Common Stock Shares Outstanding: {formatNumber(report.commonStockSharesOutstanding)}</p>
+                            <p>Goodwill: {formatNumber(report.goodwill)}</p>
+                            <p>Intangible Assets: {formatNumber(report.intangibleAssets)}</p>
+                            <p>Inventory: {formatNumber(report.inventory)}</p>
+                            <p>Cash and Cash Equivalents: {formatNumber(report.cashAndCashEquivalentsAtCarryingValue)}</p>
                         </div>
                     ))
                 ) : (
-                    <p className="text-center text-gray-400 flex justify-center items-center">
-                    </p>
+                    !loading && !error && (
+                        <p className="text-center text-gray-400">No data available.</p>
+                    )
                 )}
             </div>
         </div>
     );
+}
+
+// Utility to format large numbers safely
+function formatNumber(value) {
+    return value ? parseInt(value).toLocaleString() : 'N/A';
 }
