@@ -10,8 +10,12 @@ commands:
   install-python-dependencies:
     steps:
       - run:
+          name: Install thetadata manually
+          command: | 
+            pip install git+https://github.com/baileydanseglio/thetadata-python.git
+      - run:
           name: Install Python Dependencies
-          command: pip install --default-timeout=100 -r requirements.txt
+          command: pip install -r requirements.txt
 
   wait-for-postgres:
     steps:
