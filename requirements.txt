@@ -13,6 +13,7 @@ django-cors-headers==3.13.0
 djangorestframework-simplejwt
 django-debug-toolbar==4.0.0
 torch==2.6.0
+lumibot>=3.8.12
 transformers==4.46.3
 timedelta==2020.12.3
 alpaca_trade_api==3.2.0
