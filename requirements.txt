@@ -14,7 +14,7 @@ djangorestframework-simplejwt
 django-debug-toolbar==4.0.0
 torch==2.6.0
 transformers==4.46.3
-lumibot==3.8.12
+lumibot==3.13.8
 timedelta==2020.12.3
 alpaca_trade_api==3.2.0
 celery==5.4.0
