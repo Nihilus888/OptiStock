@@ -61,23 +61,23 @@ const NavBar = () => {
         <div className="hidden md:flex space-x-4">
           {!user && (
             <>
-              <Link to="/" className="text-white px-3 py-2 hover:text-blue-400 transition duration-300">Home</Link>
-              <Link to="/about" className="text-white px-3 py-2 hover:text-blue-400 transition duration-300">About</Link>
-              <Link to="/contact" className="text-white px-3 py-2 hover:text-blue-400 transition duration-300">Contact</Link>
-              <Link to="/create-account" className="text-white px-3 py-2 hover:text-blue-400 transition duration-300">Create</Link>
+              <Link to="/" className="text-white px-3 py-2 hover:text-blue-400 transition duration-300 transform hover:-translate-y-1">Home</Link>
+              <Link to="/about" className="text-white px-3 py-2 hover:text-blue-400 transition duration-300 transform hover:-translate-y-1">About</Link>
+              <Link to="/contact" className="text-white px-3 py-2 hover:text-blue-400 transition duration-300 transform hover:-translate-y-1">Contact</Link>
+              <Link to="/create-account" className="text-white px-3 py-2 hover:text-blue-400 transition duration-300 transform hover:-translate-y-1">Create</Link>
             </>
           )}
 
           {user ? (
             <>
-              <Link to="/price" className="text-white px-3 py-2 hover:text-blue-400 transition duration-300">Price</Link>
-              <Link to="/stats" className="text-white px-3 py-2 hover:text-blue-400 transition duration-300">Stats</Link>
-              <Link to="/news" className="text-white px-3 py-2 hover:text-blue-400 transition duration-300">News</Link>
-              <Link to="/dashboard" className="text-white px-3 py-2 hover:text-blue-400 transition duration-300">Dashboard</Link>
-              <Link to="/portfolio-analysis" className="text-white px-3 py-2 hover:text-blue-400 transition duration-300">Portfolio</Link>
-              <Link to="/company-analysis" className="text-white px-3 py-2 hover:text-blue-400 transition duration-300">Balance Sheet</Link>
-              <Link to="/income-statement" className="text-white px-3 py-2 hover:text-blue-400 transition duration-300">Income</Link>
-              <Link to="/trading-bot" className="text-white px-3 py-2 hover:text-blue-400 transition duration-300">Trading Bot</Link>
+              <Link to="/price" className="text-white px-3 py-2 hover:text-blue-400 transition duration-300 transform hover:-translate-y-1">Price</Link>
+              <Link to="/stats" className="text-white px-3 py-2 hover:text-blue-400 transition duration-300 transform hover:-translate-y-1">Stats</Link>
+              <Link to="/news" className="text-white px-3 py-2 hover:text-blue-400 transition duration-300 transform hover:-translate-y-1">News</Link>
+              <Link to="/dashboard" className="text-white px-3 py-2 hover:text-blue-400 transition duration-300 transform hover:-translate-y-1">Dashboard</Link>
+              <Link to="/portfolio-analysis" className="text-white px-3 py-2 hover:text-blue-400 transition duration-300 transform hover:-translate-y-1">Portfolio</Link>
+              <Link to="/company-analysis" className="text-white px-3 py-2 hover:text-blue-400 transition duration-300 transform hover:-translate-y-1">Balance Sheet</Link>
+              <Link to="/income-statement" className="text-white px-3 py-2 hover:text-blue-400 transition duration-300 transform hover:-translate-y-1">Income</Link>
+              <Link to="/trading-bot" className="text-white px-3 py-2 hover:text-blue-400 transition duration-300 transform hover:-translate-y-1">Trading Bot</Link>
               <button 
                 onClick={handleLogout} 
                 className="text-white px-3 py-2 hover:text-blue-400 transition duration-300"
@@ -86,7 +86,7 @@ const NavBar = () => {
               </button>
             </>
           ) : (
-            <Link to="/login" className="text-white px-3 py-2 hover:text-blue-400 transition duration-300">Login</Link>
+            <Link to="/login" className="text-white px-3 py-2 hover:text-blue-400 transition duration-300 transform hover:-translate-y-1">Login</Link>
           )}
         </div>
       </div>
@@ -96,32 +96,32 @@ const NavBar = () => {
         <div className="md:hidden mt-4 bg-gray-900 rounded-lg shadow-lg p-4 space-y-2">
           {!user && (
             <>
-              <Link to="/" className="block text-white px-3 py-2 rounded hover:bg-gray-800">Home</Link>
-              <Link to="/about" className="block text-white px-3 py-2 rounded hover:bg-gray-800">About</Link>
-              <Link to="/contact" className="block text-white px-3 py-2 rounded hover:bg-gray-800">Contact</Link>
-              <Link to="/create-account" className="block text-white px-3 py-2 rounded hover:bg-gray-800">Create</Link>
+              <Link to="/" className="block text-white px-3 py-2 rounded hover:bg-gray-800 transform hover:-translate-y-1">Home</Link>
+              <Link to="/about" className="block text-white px-3 py-2 rounded hover:bg-gray-800 transform hover:-translate-y-1">About</Link>
+              <Link to="/contact" className="block text-white px-3 py-2 rounded hover:bg-gray-800 transform hover:-translate-y-1">Contact</Link>
+              <Link to="/create-account" className="block text-white px-3 py-2 rounded hover:bg-gray-800 transform hover:-translate-y-1">Create</Link>
             </>
           )}
 
           {user ? (
             <>
-              <Link to="/price" className="block text-white px-3 py-2 rounded hover:bg-gray-800">Price</Link>
-              <Link to="/stats" className="block text-white px-3 py-2 rounded hover:bg-gray-800">Stats</Link>
-              <Link to="/news" className="block text-white px-3 py-2 rounded hover:bg-gray-800">News</Link>
-              <Link to="/dashboard" className="block text-white px-3 py-2 rounded hover:bg-gray-800">Dashboard</Link>
-              <Link to="/portfolio-analysis" className="block text-white px-3 py-2 rounded hover:bg-gray-800">Portfolio</Link>
-              <Link to="/company-analysis" className="block text-white px-3 py-2 rounded hover:bg-gray-800">Balance Sheet</Link>
-              <Link to="/income-statement" className="block text-white px-3 py-2 rounded hover:bg-gray-800">Income</Link>
-              <Link to="/trading-bot" className="block text-white px-3 py-2 rounded hover:bg-gray-800">Trading Bot</Link>
+              <Link to="/price" className="block text-white px-3 py-2 rounded hover:bg-gray-800 transform hover:-translate-y-1">Price</Link>
+              <Link to="/stats" className="block text-white px-3 py-2 rounded hover:bg-gray-800 transform hover:-translate-y-1">Stats</Link>
+              <Link to="/news" className="block text-white px-3 py-2 rounded hover:bg-gray-800 transform hover:-translate-y-1">News</Link>
+              <Link to="/dashboard" className="block text-white px-3 py-2 rounded hover:bg-gray-800 transform hover:-translate-y-1">Dashboard</Link>
+              <Link to="/portfolio-analysis" className="block text-white px-3 py-2 rounded hover:bg-gray-800 transform hover:-translate-y-1">Portfolio</Link>
+              <Link to="/company-analysis" className="block text-white px-3 py-2 rounded hover:bg-gray-800 transform hover:-translate-y-1">Balance Sheet</Link>
+              <Link to="/income-statement" className="block text-white px-3 py-2 rounded hover:bg-gray-800 transform hover:-translate-y-1">Income</Link>
+              <Link to="/trading-bot" className="block text-white px-3 py-2 rounded hover:bg-gray-800 transform hover:-translate-y-1">Trading Bot</Link>
               <button 
                 onClick={handleLogout} 
-                className="w-full text-white px-3 py-2 rounded hover:bg-red-600"
+                className="w-full text-white px-3 py-2 rounded hover:bg-red-600 transform hover:-translate-y-1"
               >
                 Logout
               </button>
             </>
           ) : (
-            <Link to="/login" className="block text-white px-3 py-2 rounded hover:bg-gray-800">Login</Link>
+            <Link to="/login" className="block text-white px-3 py-2 rounded hover:bg-gray-800 transform hover:-translate-y-1">Login</Link>
           )}
         </div>
       )}

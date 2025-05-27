@@ -18,6 +18,7 @@ import TradingBot from './components/TradingBot'; // Trading bot page for authen
 import Loading from './components/Loading'; // Loading spinner for lazy-loaded components
 import ErrorBoundary from './components/ErrorBoundary'; // Error boundary to catch and display errors in the app
 import Error from './components/Error'; // Error page to display when there is an Error
+import NotFound from './components/NotFound';
 
 // Lazy load the News component to improve performance
 const LazyNews = React.lazy(() => import('./components/News'));
@@ -44,6 +45,7 @@ function App() {
             <Route path="/about" element={<About />} /> {/* About page */}
             <Route path="/contact" element={<Contact />} /> {/* Contact page */}
             <Route path="/login" element={<Login />} /> {/* Login page for signing in */}
+            <Route path="*" element={<NotFound />} /> 
             
             {/* Protected routes (only accessible by authenticated users) */}
             <Route path="/stats" element={<PrivateRoute element={<Stats />} />} /> {/* Stats page */}
