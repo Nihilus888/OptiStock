@@ -34,6 +34,13 @@ OptiStock’s API integration connects with stock market data providers and opti
 ## Caching
 As API rate limit calls happen frequently on some of our third-party API integrations, I have added a caching layer using Redis to store data that only updates after a few months like balance sheet so that we don't flood their server with request that might get us rate limited unnecessarily.
 
+## Docker Containerization
+
+Managing dependencies can often be a major challenge in software development, especially when an application works perfectly on one machine but fails to run correctly on others. This problem typically arises due to differences in development environments, library versions, or system configurations.
+
+To address these issues, I adopted Docker to containerize my applications. Docker allows me to package the entire application, along with all its dependencies, libraries, and runtime environment, into a single, portable container. This container can then run consistently across any system that supports Docker, eliminating the classic "it works on my machine" problem.
+
+
 ## Monitoring and Logging
 To catch hidden issues early and ensure long-term stability, I integrated Sentry for real-time error monitoring, logging, and stack tracing. The setup was quick and straightforward, and Sentry immediately began capturing valuable insights into potential bugs and edge cases. Below are examples of issues it successfully logged.
 
@@ -46,7 +53,7 @@ OptiStock's trading bot uses machine learning via sentiment analysis that analyz
 The vision for OptiStock is to become a go-to solution for investors looking for automated, reliable, and comprehensive portfolio management. It aims to combine the latest advancements in data science and financial modeling with an intuitive user interface, making high-level financial analysis accessible to both experienced and novice investors alike.
 
 ## Things that I have picked up
-With the increasing rate of devops being required for full stack software engineers, I've decided to pick up and do more of automated testing via CI/CD pipelines using circle ci and writing out the test cases for both frontend and backend to ensure that my application behaves as it should be without any unforeseen issues arising that might break it. In addition, I had to learn Django from scratch but having knowledge in backend engineering and python, it was easier to pick it up after watching some youtube videos, reading the documentation and using chatgpt.
+With the increasing rate of devops being required for full stack software engineers, I've decided to pick up and do more of automated testing via CI/CD pipelines using circle ci and writing out the test cases for both frontend and backend using Pytest and Jest to ensure that my application behaves as it should be without any unforeseen issues arising that might break it. In addition, I had to learn Django from scratch but having knowledge in backend engineering and python, it was easier to pick it up after watching some youtube videos, reading the documentation and using chatgpt.
 
 ## Images of the application
 
