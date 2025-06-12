@@ -11,7 +11,6 @@ import Contact from './components/Contact'; // Contact page
 import { AuthProvider, useAuth } from './components/AuthContext'; // Context to manage authentication state
 import PortfolioAnalysis from './components/PortfolioAnalysis'; // Portfolio analysis component for authenticated users
 import Stats from './components/Stats'; // Stats page for authenticated users
-import Price from './components/Price'; // Price-related page
 import BalanceSheet from './components/BalanceSheet'; // Company balance sheet page
 import IncomeStatement from './components/IncomeStatement'; // Income statement page
 import TradingBot from './components/TradingBot'; // Trading bot page for authenticated users
@@ -22,6 +21,9 @@ import NotFound from './components/NotFound';
 
 // Lazy load the News component to improve performance
 const LazyNews = React.lazy(() => import('./components/News'));
+
+// Lazy lod the Price components to improve performance
+const LazyPrice = React.lazy(() => import('./components/Price'));
 
 // PrivateRoute component ensures that only authenticated users can access protected routes
 const PrivateRoute = ({ element }) => {
@@ -65,7 +67,18 @@ function App() {
             {/* More protected routes */}
             <Route path="/portfolio-analysis" element={<PrivateRoute element={<PortfolioAnalysis />} />} />
             <Route path="/dashboard" element={<PrivateRoute element={<HomeAuth />} />} />
-            <Route path="/price" element={<PrivateRoute element={<Price />} />} />
+            {/* Lazy-loaded Price page with a fallback loading spinner */}
+            <Route
+              path="/price"
+              element={
+                <PrivateRoute element={
+                  <React.Suspense fallback={<Loading />}>
+                    <LazyPrice />
+                  </React.Suspense>
+
+                } />
+              }
+            />
             <Route path="/company-analysis"  element={<PrivateRoute element={<BalanceSheet />} />} />
             <Route path="/income-statement" element={<PrivateRoute element={<IncomeStatement />} />} />
             <Route path="/trading-bot" element={<PrivateRoute element={<TradingBot />} />} />
