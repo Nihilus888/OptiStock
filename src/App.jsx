@@ -47,7 +47,7 @@ function App() {
             <Route path="/about" element={<About />} /> {/* About page */}
             <Route path="/contact" element={<Contact />} /> {/* Contact page */}
             <Route path="/login" element={<Login />} /> {/* Login page for signing in */}
-            <Route path="*" element={<NotFound />} /> 
+            <Route path="*" element={<NotFound />} />  {/* Not Found page for routes not in here}
             
             {/* Protected routes (only accessible by authenticated users) */}
             <Route path="/stats" element={<PrivateRoute element={<Stats />} />} /> {/* Stats page */}
